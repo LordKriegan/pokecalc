@@ -12,6 +12,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
 import { ScreenBase } from './components';
+import { Main } from './screens';
 
 const Stack = createStackNavigator();
 
@@ -25,7 +26,7 @@ const App: () => React$Node = () => {
       >
         <Stack.Screen
           name="Main"
-          component={ScreenBase}
+          component={Main}
         />
         <Stack.Screen
           name="CardLookup"

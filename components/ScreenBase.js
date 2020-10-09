@@ -1,5 +1,3 @@
-
-
 import React from 'react';
 import { View, StyleSheet, ImageBackground } from 'react-native';
 
@@ -20,7 +18,7 @@ const ScreenBase: () => React$Node = (props) => {
         <>
             <View style={styles.main}>
                 <ImageBackground style={styles.backgroundImg} source={require("../resources/forest.jpg")}>
-
+                    {props.children}
                 </ImageBackground>
             </View>
         </>
