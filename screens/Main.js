@@ -1,5 +1,5 @@
-import React from 'react';
-import { View, StyleSheet, Text, Image } from 'react-native';
+import React, { useState } from 'react';
+import { View, StyleSheet, TouchableOpacity, Image, Text } from 'react-native';
 import { ScreenBase } from '../components';
 const styles = StyleSheet.create({
     main: {
@@ -31,22 +31,57 @@ const styles = StyleSheet.create({
         resizeMode: "contain",
         height: "60%",
         width: "20%"
+    },
+    addCardBtn: {
+        height: "60%",
+        width: "12%",
+        backgroundColor: "rgba(220,220,220, 0.5)",
+        borderStyle: "dotted",
+        borderWidth: 2,
+        borderRadius: 10,
+
+        alignItems: "center",
+        justifyContent: "center"
+    },
+    addCardBtnTxt: {
+        fontFamily: "GUNPLAY_",
+        fontSize: 45,
     }
 });
 
+
+
 const Main: () => React$Node = (props) => {
+    const [active, setActive] = useState([]);
+    const [bench, setBench] = useState([]);
+
+    const addCard = () => {
+        if (active.length === 0) {
+            setActive([...active, { uri: "https://images.pokemontcg.io/ex3/100.png", hp: 120 }])
+        } else {
+            setBench([...bench, { uri: "https://images.pokemontcg.io/ex3/100.png", hp: 120 }])
+        }
+    }
 
     return (
         <ScreenBase>
             <View style={styles.main}>
                 <View style={styles.activePokemonZone}>
-                    <Image style={styles.activePokemonCard} source={{ uri: "https://images.pokemontcg.io/ex3/100.png" }} />
+                    {active.map((elem) => {
+                        return (
+                            <Image source={{ uri: elem.uri }} style={styles.activePokemonCard} />
+                        )
+                    })}
                 </View>
                 <View style={styles.benchedPokemonZone}>
-                    <Image style={styles.benchedPokemonCard} source={{ uri: "https://images.pokemontcg.io/ex3/100.png" }} />
-                    <Image style={styles.benchedPokemonCard} source={{ uri: "https://images.pokemontcg.io/ex3/100.png" }} />
-                    <Image style={styles.benchedPokemonCard} source={{ uri: "https://images.pokemontcg.io/ex3/100.png" }} />
-                    <Image style={styles.benchedPokemonCard} source={{ uri: "https://images.pokemontcg.io/ex3/100.png" }} />
+                    {bench.map((elem) => {
+                        return (
+                            <Image source={{ uri: elem.uri }} style={styles.benchedPokemonCard} />
+                        )
+                    })}
+                    {((active.length + bench.length) < 6) ? <TouchableOpacity style={styles.addCardBtn} onPress={addCard}>
+                        <Text style={styles.addCardBtnTxt}>+</Text>
+                    </TouchableOpacity> : null}
                 </View>
             </View>
         </ScreenBase>
