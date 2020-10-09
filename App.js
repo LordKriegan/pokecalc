@@ -5,35 +5,34 @@
  * @format
  * @flow strict-local
  */
+import 'react-native-gesture-handler';
 
 import React from 'react';
-import {
-  StyleSheet,
-  ImageBackground,
-  View
-} from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
 
+import { ScreenBase } from './components';
 
-const styles = StyleSheet.create({
-  main: {
-    flex: 1,
-    flexDirection: "column"
-  },
-  backgroundImg: {
-    height: "100%",
-    width: "100%",
-  }
-});
+const Stack = createStackNavigator();
 
 const App: () => React$Node = () => {
   return (
-    <>
-      <View style={styles.main}>
-        <ImageBackground style={styles.backgroundImg} source={require("./resources/forest.jpg")}>
-
-        </ImageBackground>
-      </View>
-    </>
+    <NavigationContainer>
+      <Stack.Navigator
+        screenOptions={{
+          headerShown: false
+        }}
+      >
+        <Stack.Screen
+          name="Main"
+          component={ScreenBase}
+        />
+        <Stack.Screen
+          name="CardLookup"
+          component={ScreenBase}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 };
 
