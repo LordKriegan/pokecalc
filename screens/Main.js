@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, TouchableOpacity, Image, Text } from 'react-native';
-import { ScreenBase } from '../components';
+import { View, StyleSheet, TouchableOpacity, Image, Text, } from 'react-native';
+import { ScreenBase, Card } from '../components';
+
 const styles = StyleSheet.create({
     main: {
         flex: 1,
@@ -52,6 +53,7 @@ const styles = StyleSheet.create({
 
 
 const Main: () => React$Node = (props) => {
+
     const [active, setActive] = useState([]);
     const [bench, setBench] = useState([]);
 
@@ -67,16 +69,16 @@ const Main: () => React$Node = (props) => {
         <ScreenBase>
             <View style={styles.main}>
                 <View style={styles.activePokemonZone}>
-                    {active.map((elem) => {
+                    {active.map((elem, i) => {
                         return (
-                            <Image source={{ uri: elem.uri }} style={styles.activePokemonCard} />
+                                <Card key={"Active" + i} type="active" card={elem} />
                         )
                     })}
                 </View>
                 <View style={styles.benchedPokemonZone}>
-                    {bench.map((elem) => {
+                    {bench.map((elem, i) => {
                         return (
-                            <Image source={{ uri: elem.uri }} style={styles.benchedPokemonCard} />
+                            <Card key={"Bench" + i} type="bench" card={elem} />
                         )
                     })}
                     {((active.length + bench.length) < 6) ? <TouchableOpacity style={styles.addCardBtn} onPress={addCard}>
