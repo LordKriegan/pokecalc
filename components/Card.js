@@ -41,12 +41,17 @@ const Card: () => React$Node = (props) => {
             <GestureRecognizer
                 style={styles.container}
                 onSwipeLeft={(state) => {
-                    props.setHp(props.card.hp - 10, props.type, props.index)
+                    props.setHp(props.card.hp - 10, props.type, props.index);
                 }}
                 onSwipeRight={(state) => {
-                    props.setHp(props.card.hp + 10, props.type, props.index)
+                    props.setHp(props.card.hp + 10, props.type, props.index);
                 }}
-                
+                onSwipeUp={(state) => {
+                    if (props.type === "bench" && props.promote) props.promote(props.index);
+                }}
+                onSwipeDown={(state) => {
+                    if (props.type === "active" && props.retreat) props.retreat(props.index);
+                }}
             >
             <Image style={(props.type === "active") ? styles.activePokemonCard : styles.benchedPokemonCard} source={{ uri: props.card.uri }} />
                 <Text style={{ ...styles.hpText, fontSize: (props.type === "active" ? 50 : 25) }}>{props.card.hp}</Text>

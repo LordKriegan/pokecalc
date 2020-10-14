@@ -59,29 +59,37 @@ const Main: () => React$Node = (props) => {
 
     const addCard = () => {
         if (active.length === 0) {
-            setActive([...active, { uri: "https://images.pokemontcg.io/ex3/100.png", hp: 120 }])
+            setActive([...active, { uri: "https://images.pokemontcg.io/ex3/100.png", hp: 120, prize: 1, name: "Charizard" }])
         } else {
-            setBench([...bench, { uri: "https://images.pokemontcg.io/pop3/1.png", hp: 120 }])
+            setBench([...bench, { uri: "https://images.pokemontcg.io/pop3/1.png", hp: 120, prize: 1, name: "Blastoise" }])
         }
     }
     const setCardHp = (newHp, zone, index) => {
         let newArr = [...(zone === "active") ? active : bench];
         if (newHp <= 0) {
-            newArr.splice(index, 1)
-            if (zone === 'active') {
-                if (bench.length > 0) {
-                    setActive([bench[0]]);
-                    newArr = [...bench];
-                    newArr.splice(0,1)
-                    setBench(newArr);
-                    return;
-                }
-            }
+            let removedCard = newArr.splice(index, 1)[0];
+            console.log(removedCard);
         } else {
             newArr[index].hp = newHp;
         }
         if (zone === "active") setActive(newArr)
         else setBench(newArr)
+    }
+    const promote = (index) => {
+        if (active.length < 2) {
+            setActive([...active, bench[index]]);
+            let newBench = [...bench];
+            newBench.splice(index, 1);
+            setBench(newBench);
+        }
+    }
+    const retreat = (index) => {
+        if (bench.length < 5) {
+            setBench([...bench, active[index]]);
+            let newActive = [...active];
+            newActive.splice(index, 1);
+            setActive(newActive);
+        }
     }
     return (
         <ScreenBase>
@@ -89,14 +97,14 @@ const Main: () => React$Node = (props) => {
                 <View style={styles.activePokemonZone}>
                     {active.map((elem, i) => {
                         return (
-                            <Card key={"Active" + i} type="active" card={elem} index={i} setHp={setCardHp} />
+                            <Card key={"Active" + i} type="active" card={elem} index={i} setHp={setCardHp} retreat={retreat}/>
                         )
                     })}
                 </View>
                 <View style={styles.benchedPokemonZone}>
                     {bench.map((elem, i) => {
                         return (
-                            <Card key={"Bench" + i} type="bench" card={elem} index={i} setHp={setCardHp} />
+                            <Card key={"Bench" + i} type="bench" card={elem} index={i} setHp={setCardHp} promote={promote} />
                         )
                     })}
                     {((active.length + bench.length) < 6) ? <TouchableOpacity style={styles.addCardBtn} onPress={addCard}>
