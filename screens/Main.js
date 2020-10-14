@@ -61,24 +61,42 @@ const Main: () => React$Node = (props) => {
         if (active.length === 0) {
             setActive([...active, { uri: "https://images.pokemontcg.io/ex3/100.png", hp: 120 }])
         } else {
-            setBench([...bench, { uri: "https://images.pokemontcg.io/ex3/100.png", hp: 120 }])
+            setBench([...bench, { uri: "https://images.pokemontcg.io/pop3/1.png", hp: 120 }])
         }
     }
-
+    const setCardHp = (newHp, zone, index) => {
+        let newArr = [...(zone === "active") ? active : bench];
+        if (newHp <= 0) {
+            newArr.splice(index, 1)
+            if (zone === 'active') {
+                if (bench.length > 0) {
+                    setActive([bench[0]]);
+                    newArr = [...bench];
+                    newArr.splice(0,1)
+                    setBench(newArr);
+                    return;
+                }
+            }
+        } else {
+            newArr[index].hp = newHp;
+        }
+        if (zone === "active") setActive(newArr)
+        else setBench(newArr)
+    }
     return (
         <ScreenBase>
             <View style={styles.main}>
                 <View style={styles.activePokemonZone}>
                     {active.map((elem, i) => {
                         return (
-                                <Card key={"Active" + i} type="active" card={elem} />
+                            <Card key={"Active" + i} type="active" card={elem} index={i} setHp={setCardHp} />
                         )
                     })}
                 </View>
                 <View style={styles.benchedPokemonZone}>
                     {bench.map((elem, i) => {
                         return (
-                            <Card key={"Bench" + i} type="bench" card={elem} />
+                            <Card key={"Bench" + i} type="bench" card={elem} index={i} setHp={setCardHp} />
                         )
                     })}
                     {((active.length + bench.length) < 6) ? <TouchableOpacity style={styles.addCardBtn} onPress={addCard}>

@@ -1,11 +1,12 @@
 import React from 'react';
-import { View, StyleSheet, Image, Text, Dimensions } from 'react-native';
+import { View, StyleSheet, Image, Text } from 'react-native';
+import GestureRecognizer, { swipeDirections } from 'react-native-swipe-gestures';
 
 const styles = StyleSheet.create({
     container: {
         flexDirection: "column",
         alignItems: "center",
-        position:"relative",
+        position: "relative",
         width: "15%"
     },
     activePokemonCard: {
@@ -18,25 +19,39 @@ const styles = StyleSheet.create({
         height: "60%",
         width: "100%"
     },
+    gesturePos: {
+       
+    }    ,
     hpText: {
-        position: "absolute",
-        bottom: "10%",
         fontFamily: "GUNPLA3D",
         color: "red",
         backgroundColor: "rgba(220,220,220, 0.75)",
         borderRadius: 10,
         textAlign: "center",
-        textAlignVertical: "center"
+        textAlignVertical: "center",
+        position: "absolute",
+        bottom: "10%",
     }
 });
 
 const Card: () => React$Node = (props) => {
-    
+ 
     return (
-        <View style={styles.container}>
+        
+            <GestureRecognizer
+                style={styles.container}
+                onSwipeLeft={(state) => {
+                    props.setHp(props.card.hp - 10, props.type, props.index)
+                }}
+                onSwipeRight={(state) => {
+                    props.setHp(props.card.hp + 10, props.type, props.index)
+                }}
+                
+            >
             <Image style={(props.type === "active") ? styles.activePokemonCard : styles.benchedPokemonCard} source={{ uri: props.card.uri }} />
-            <Text style={{...styles.hpText, fontSize: (props.type==="active" ? 50 : 25)}}>{props.card.hp}</Text>
-        </View>
+                <Text style={{ ...styles.hpText, fontSize: (props.type === "active" ? 50 : 25) }}>{props.card.hp}</Text>
+            </GestureRecognizer>
+        
     );
 };
 
