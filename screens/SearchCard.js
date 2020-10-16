@@ -10,8 +10,8 @@
  */
 
 import React, { useState } from 'react';
-import { View, StyleSheet, TouchableOpacity, Text, Image, ScrollView, TextInput, FlatList } from 'react-native';
-import { ScreenBase } from '../components';
+import { View, StyleSheet, TouchableOpacity, Text, Image, ScrollView, TextInput } from 'react-native';
+import { ScreenBase, SearchItem } from '../components';
 import axios from 'axios';
 
 
@@ -54,9 +54,9 @@ const styles = StyleSheet.create({
         width: "100%", 
     },
     cardListItem: {
-        resizeMode: "contain",
+        resizeMode: "stretch",
         height: 250,
-        width: 100,
+        width: 150,
         marginLeft: 5,
         marginRight: 5
     }
@@ -85,7 +85,7 @@ const SearchCard: () => React$Node = ({ navigation }) => {
     const parseCard = (card) => {
         let newCard = {
             name: card.name,
-            uri: card.imageUrlHiRes,
+            uri: card.imageUrl,
             hp: card.hp
         }
         switch (card.subtype) {
@@ -115,28 +115,15 @@ const SearchCard: () => React$Node = ({ navigation }) => {
                     <View style={{flexDirection: "row", flexWrap: "wrap"}}>
                         {cardList.map((elem, i) => {
                         return (
-                            <View key={elem.uri} >
-                                <Image style={styles.cardListItem} source={{ uri: elem.uri }} onError={({ nativeEvent: {error} }) => console.log(error)} />
-                            </View>
+                            // <View key={elem.uri} >
+                            //     <Image style={styles.cardListItem} source={{ uri: elem.uri }} onError={({ nativeEvent: {error} }) => console.log(error)} />
+                            // </View>
+                            <SearchItem key={elem.uri} card={elem} styleImg={styles.cardListItem} />
                         )
                     })}
                     </View>
                     
                 </ScrollView>
-                {/* <FlatList 
-                    style={styles.cardList}
-                    data={cardList}
-                    renderItem={({item}) => {
-                        console.log(item)
-                        return (
-                            <View>
-                                <Text>{item.name}</Text>
-                                <Image style={{...styles.cardListItem, resizeMode: "contain"}} source={{ uri: item.uri }} />
-                            </View>
-                        )
-                    }}
-                    keyExtractor={(item) => item.uri}
-                /> */}
             </View>
         </ScreenBase>
     )
