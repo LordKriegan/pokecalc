@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, TouchableOpacity, Image, Text, } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
 import { ScreenBase, Card } from '../components';
 
 const styles = StyleSheet.create({
@@ -15,11 +15,6 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: "row",
     },
-    activePokemonCard: {
-        resizeMode: "contain",
-        height: "80%",
-        width: "50%"
-    },
     benchedPokemonZone: {
         height: "35%",
         alignItems: "center",
@@ -27,11 +22,6 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         flex: 1,
         flexDirection: "row",
-    },
-    benchedPokemonCard: {
-        resizeMode: "contain",
-        height: "60%",
-        width: "20%"
     },
     addCardBtn: {
         height: "60%",
@@ -50,9 +40,15 @@ const styles = StyleSheet.create({
     }
 });
 
+const status = {
+    paralyzed: 0,
+    burned: 0,
+    asleep: 0,
+    poisoned: 0,
+    confused: 0
+}
 
-
-const Main: () => React$Node = (props) => {
+const Main: () => React$Node = ({ navigation }) => {
 
     const [active, setActive] = useState([]);
     const [bench, setBench] = useState([]);
@@ -64,6 +60,15 @@ const Main: () => React$Node = (props) => {
             setBench([...bench, { uri: "https://images.pokemontcg.io/pop3/1.png", hp: 120, prize: 1, name: "Blastoise" }])
         }
     }
+
+    
+    // const addCard = (card) => {
+    //     if (active.length === 0) {
+    //         setActive([...active, { ...card, ...status }])
+    //     } else {
+    //         setBench([...bench, { ...card }])
+    //     }
+    // }
     const setCardHp = (newHp, zone, index) => {
         let newArr = [...(zone === "active") ? active : bench];
         if (newHp <= 0) {
@@ -77,7 +82,7 @@ const Main: () => React$Node = (props) => {
     }
     const promote = (index) => {
         if (active.length < 2) {
-            setActive([...active, bench[index]]);
+            setActive([...active, { ...bench[index], ...status}]);
             let newBench = [...bench];
             newBench.splice(index, 1);
             setBench(newBench);
@@ -85,11 +90,23 @@ const Main: () => React$Node = (props) => {
     }
     const retreat = (index) => {
         if (bench.length < 5) {
-            setBench([...bench, active[index]]);
+            let retreatedActive = {...active[index]}
+            let retreatedCard = {
+                uri: retreatedActive.uri,
+                hp: retreatedActive.hp,
+                prize: retreatedActive.prize,
+                name: retreatedActive.name
+            }
+            setBench([...bench, retreatedCard]);
             let newActive = [...active];
             newActive.splice(index, 1);
             setActive(newActive);
         }
+    }
+    const gotoCardLookup = () => {
+        navigation.navigate("CardLookup", {
+            addCard: addCard
+        })
     }
     return (
         <ScreenBase>
