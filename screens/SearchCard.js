@@ -85,7 +85,7 @@ const SearchCard: () => React$Node = ({ navigation }) => {
     const parseCard = (card) => {
         let newCard = {
             name: card.name,
-            uri: card.imageUrl,
+            uri: card.imageUrlHiRes,
             hp: card.hp
         }
         switch (card.subtype) {
@@ -114,10 +114,9 @@ const SearchCard: () => React$Node = ({ navigation }) => {
                 <ScrollView style={styles.cardList} horizontal={true}>
                     <View style={{flexDirection: "row", flexWrap: "wrap"}}>
                         {cardList.map((elem, i) => {
-                            console.log(elem.name, elem.uri)
                         return (
                             <View key={elem.uri} >
-                                <Image style={styles.cardListItem} source={{ uri: elem.uri }} />
+                                <Image style={styles.cardListItem} source={{ uri: elem.uri }} onError={({ nativeEvent: {error} }) => console.log(error)} />
                             </View>
                         )
                     })}
