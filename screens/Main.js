@@ -104,9 +104,7 @@ const Main: () => React$Node = ({ navigation }) => {
         }
     }
     const gotoCardLookup = () => {
-        navigation.navigate("CardLookup", {
-            addCard: addCard
-        })
+        navigation.navigate("CardLookup")
     }
     return (
         <ScreenBase>
@@ -124,7 +122,7 @@ const Main: () => React$Node = ({ navigation }) => {
                             <Card key={"Bench" + i} type="bench" card={elem} index={i} setHp={setCardHp} promote={promote} />
                         )
                     })}
-                    {((active.length + bench.length) < 6) ? <TouchableOpacity style={styles.addCardBtn} onPress={addCard}>
+                    {((active.length + bench.length) < 6) ? <TouchableOpacity style={styles.addCardBtn} onPress={gotoCardLookup}>
                         <Text style={styles.addCardBtnTxt}>+</Text>
                     </TouchableOpacity> : null}
                 </View>
