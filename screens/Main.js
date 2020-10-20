@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
 import { ScreenBase, Card } from '../components';
 
@@ -48,27 +48,29 @@ const status = {
     confused: 0
 }
 
-const Main: () => React$Node = ({ navigation }) => {
+const Main: () => React$Node = ({ route, navigation }) => {
 
     const [active, setActive] = useState([]);
     const [bench, setBench] = useState([]);
-
-    const addCard = () => {
-        if (active.length === 0) {
-            setActive([...active, { uri: "https://images.pokemontcg.io/ex3/100.png", hp: 120, prize: 1, name: "Charizard" }])
-        } else {
-            setBench([...bench, { uri: "https://images.pokemontcg.io/pop3/1.png", hp: 120, prize: 1, name: "Blastoise" }])
-        }
-    }
-
-    
-    // const addCard = (card) => {
+    useEffect(() => {
+        if (route.params?.newCard) addCard(route.params.newCard)
+    }, [route.params?.newCard])
+    // const addCard = () => {
     //     if (active.length === 0) {
-    //         setActive([...active, { ...card, ...status }])
+    //         setActive([...active, { uri: "https://images.pokemontcg.io/ex3/100.png", hp: 120, prize: 1, name: "Charizard" }])
     //     } else {
-    //         setBench([...bench, { ...card }])
+    //         setBench([...bench, { uri: "https://images.pokemontcg.io/pop3/1.png", hp: 120, prize: 1, name: "Blastoise" }])
     //     }
     // }
+
+    
+    const addCard = (card) => {
+        if (active.length === 0) {
+            setActive([...active, { ...card, ...status }])
+        } else {
+            setBench([...bench, { ...card }])
+        }
+    }
     const setCardHp = (newHp, zone, index) => {
         let newArr = [...(zone === "active") ? active : bench];
         if (newHp <= 0) {

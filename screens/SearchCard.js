@@ -62,16 +62,17 @@ const styles = StyleSheet.create({
     }
 });
 
-const SearchCard: () => React$Node = ({ navigation }) => {
+const SearchCard: () => React$Node = ({ route, navigation }) => {
     const [cardList, setCardList] = useState([]);
     const [name, onChangeName] = React.useState('');
     const [hp, onChangeHP] = React.useState('');
 
-    const findCard = (name, hp, evolvesFrom) => {
+    const findCard = () => {
         if (name === "") return
         let apiUrl = `https://api.pokemontcg.io/v1/cards?supertype=pokemon&name=${name}`;
         if (hp !== "") apiUrl += `&hp=${hp}`;
-        //if (evolvesFrom !== "") apiUrl += `&evolvesFrom=${evolvesFrom}`; // instead of checking for an empty string, check to see if evolvesfrom is a navigation prop
+        if (route.params?.evolvesFrom && route.params?.evolvesFrom !== "") apiUrl += `&evolvesFrom=${route.params?.evolvesFrom}`; // instead of checking for an empty string, check to see if evolvesfrom is a navigation prop
+        console.log(apiUrl)
         axios
             .get(apiUrl)
             .then(({ data: { cards } }) => {
@@ -100,6 +101,12 @@ const SearchCard: () => React$Node = ({ navigation }) => {
         }
         return newCard
     }
+
+    const benchAndReturnToMain = (card) => {
+        navigation.navigate("Main", {
+            newCard: card
+        })
+    }
     // const handleOnChangeHp = (text) => {
     //     if (/^\d+$/.test(text)) onChangeHP(text);
     // }
@@ -109,7 +116,7 @@ const SearchCard: () => React$Node = ({ navigation }) => {
                 <View style={styles.inputBox}>
                     <TextInput style={{ ...styles.nameInput, ...styles.textInput }} onChangeText={text => onChangeName(text)} value={name} placeholder="Name" />
                     <TextInput style={{ ...styles.hpInput, ...styles.textInput }} onChangeText={text => onChangeHP(text)} value={hp} placeholder="HP" keyboardType="numeric" />
-                    <TouchableOpacity onPress={() => findCard(name, hp)} style={styles.searchBtn}><Text style={{ color: 'white' }}>Search</Text></TouchableOpacity>
+                    <TouchableOpacity onPress={findCard} style={styles.searchBtn}><Text style={{ color: 'white' }}>Search</Text></TouchableOpacity>
                 </View>
                 <ScrollView style={styles.cardList} horizontal={true}>
                     <View style={{flexDirection: "row", flexWrap: "wrap"}}>
@@ -118,7 +125,9 @@ const SearchCard: () => React$Node = ({ navigation }) => {
                             // <View key={elem.uri} >
                             //     <Image style={styles.cardListItem} source={{ uri: elem.uri }} onError={({ nativeEvent: {error} }) => console.log(error)} />
                             // </View>
-                            <SearchItem key={elem.uri} card={elem} styleImg={styles.cardListItem} />
+                            <TouchableOpacity key={elem.uri} onLongPress={() => benchAndReturnToMain(elem)}>
+                                <SearchItem  card={elem} styleImg={styles.cardListItem} />
+                            </TouchableOpacity>
                         )
                     })}
                     </View>
