@@ -45,14 +45,14 @@ const SearchItem: () => React$Node = (props) => {
     const [isError, setError] = useState(false);
     return (
         <View style={styles.container}>
-            <Text style={styles.cardName} numberOfLines={1}>{props.card.name}</Text>
+            {(isError) ? <Text style={styles.cardName} numberOfLines={1}>{props.card.name}</Text> : null }
             {
                 (isError) ?
 
                     <Image style={styles.cardListItem} source={require('../resources/cardback.png')} /> :
                     <Image style={styles.cardListItem} source={{ uri: props.card.uri }} onError={({ nativeEvent: { error } }) => setError(true)} />
             }
-            <Text style={styles.cardHp}>{props.card.hp}</Text>
+            {(isError) ? <Text style={styles.cardHp}>{props.card.hp}</Text> : null }
         </View>
     )
 };
