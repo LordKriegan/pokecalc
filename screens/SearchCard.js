@@ -87,7 +87,7 @@ const SearchCard: () => React$Node = ({ route, navigation }) => {
         let newCard = {
             name: card.name,
             uri: card.imageUrl,
-            hp: card.hp
+            hp: parseInt(card.hp)
         }
         switch (card.subtype) {
             case "GX":
@@ -122,17 +122,15 @@ const SearchCard: () => React$Node = ({ route, navigation }) => {
                     <View style={{flexDirection: "row", flexWrap: "wrap"}}>
                         {cardList.map((elem, i) => {
                         return (
-                            // <View key={elem.uri} >
-                            //     <Image style={styles.cardListItem} source={{ uri: elem.uri }} onError={({ nativeEvent: {error} }) => console.log(error)} />
-                            // </View>
+       
                             <TouchableOpacity key={elem.uri} onLongPress={() => benchAndReturnToMain(elem)}>
                                 <SearchItem  card={elem} styleImg={styles.cardListItem} />
                             </TouchableOpacity>
                         )
                     })}
                     </View>
-                    
                 </ScrollView>
+                
             </View>
         </ScreenBase>
     )

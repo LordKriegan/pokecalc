@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, StyleSheet, Image, Text } from 'react-native';
 import GestureRecognizer, { swipeDirections } from 'react-native-swipe-gestures';
 
@@ -10,16 +10,16 @@ const styles = StyleSheet.create({
         width: "15%"
     },
     activePokemonCard: {
-        resizeMode: "contain",
+        resizeMode: "stretch",
         height: "80%",
         width: "100%"
     },
     benchedPokemonCard: {
-        resizeMode: "contain",
+        resizeMode: "stretch",
         height: "60%",
-        width: "100%"
+        width: "80%"
     },
-    hpText: {
+    cardText: {
         fontFamily: "GUNPLA3D",
         color: "red",
         backgroundColor: "rgba(220,220,220, 0.75)",
@@ -27,12 +27,11 @@ const styles = StyleSheet.create({
         textAlign: "center",
         textAlignVertical: "center",
         position: "absolute",
-        bottom: "10%",
     }
 });
 
 const Card: () => React$Node = (props) => {
-
+    const [isError, setError] = useState(false);
     return (
 
         <GestureRecognizer
@@ -50,8 +49,9 @@ const Card: () => React$Node = (props) => {
                 if (props.type === "active" && props.retreat) props.retreat(props.index);
             }}
         >
-            <Image style={(props.type === "active") ? styles.activePokemonCard : styles.benchedPokemonCard} source={{ uri: props.card.uri }} />
-            <Text style={{ ...styles.hpText, fontSize: (props.type === "active" ? 50 : 25) }}>{props.card.hp}</Text>
+            {(isError) ? <Text numberOfLines={1} style={{...styles.cardText, top: "5%", zIndex: 1000, fontSize: (props.type === "active" ? 15 : 10), width: "80%"}}>{props.card.name}</Text> : null}
+            <Image style={(props.type === "active") ? styles.activePokemonCard : styles.benchedPokemonCard} source={ (isError) ? require("../resources/cardback.png") : { uri: props.card.uri } } onError={({ nativeEvent: { error } }) => setError(true)} />
+            <Text style={{ ...styles.cardText, bottom: "10%", fontSize: (props.type === "active" ? 50 : 25) }}>{props.card.hp}</Text>
         </GestureRecognizer>
 
     );

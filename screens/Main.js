@@ -55,14 +55,6 @@ const Main: () => React$Node = ({ route, navigation }) => {
     useEffect(() => {
         if (route.params?.newCard) addCard(route.params.newCard)
     }, [route.params?.newCard])
-    // const addCard = () => {
-    //     if (active.length === 0) {
-    //         setActive([...active, { uri: "https://images.pokemontcg.io/ex3/100.png", hp: 120, prize: 1, name: "Charizard" }])
-    //     } else {
-    //         setBench([...bench, { uri: "https://images.pokemontcg.io/pop3/1.png", hp: 120, prize: 1, name: "Blastoise" }])
-    //     }
-    // }
-
     
     const addCard = (card) => {
         if (active.length === 0) {
