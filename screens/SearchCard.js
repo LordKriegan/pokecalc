@@ -94,8 +94,10 @@ const SearchCard: () => React$Node = ({ route, navigation }) => {
             case "EX":
             case "MEGA":
                 newCard.prize = 2
+                break;
             case "TAG TEAM":
                 newCard.prize = 3
+                break;
             default:
                 newCard.prize = 1
         }

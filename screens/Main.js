@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
-import { ScreenBase, Card } from '../components';
+import { View, StyleSheet, TouchableOpacity, Text, Image } from 'react-native';
+import { ScreenBase, Card, PrizeMgr } from '../components';
 
 const styles = StyleSheet.create({
     main: {
@@ -14,6 +14,7 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         flex: 1,
         flexDirection: "row",
+        position: "relative",
     },
     benchedPokemonZone: {
         height: "35%",
@@ -30,13 +31,19 @@ const styles = StyleSheet.create({
         borderStyle: "dotted",
         borderWidth: 2,
         borderRadius: 10,
-
         alignItems: "center",
         justifyContent: "center"
     },
     addCardBtnTxt: {
         fontFamily: "GUNPLAY_",
         fontSize: 45,
+    },
+    prizeZone: {
+        position: "absolute",
+        left: 5,
+        top: 30,
+        width: "33%",
+        height: "100%",
     }
 });
 
@@ -52,21 +59,32 @@ const Main: () => React$Node = ({ route, navigation }) => {
 
     const [active, setActive] = useState([]);
     const [bench, setBench] = useState([]);
+    const [prizeCount, setPrizeCount] = useState(6);
     useEffect(() => {
         if (route.params?.newCard) addCard(route.params.newCard)
     }, [route.params?.newCard])
     
     const addCard = (card) => {
+        if (active.length + bench.length >= 6) return
         if (active.length === 0) {
             setActive([...active, { ...card, ...status }])
         } else {
             setBench([...bench, { ...card }])
         }
     }
+    const setPrizes = (num) => {
+        if (num <= 0) {
+            //handle game over
+            setPrizeCount(0);
+            return
+        }
+        setPrizeCount(num)
+    }
     const setCardHp = (newHp, zone, index) => {
         let newArr = [...(zone === "active") ? active : bench];
         if (newHp <= 0) {
             let removedCard = newArr.splice(index, 1)[0];
+            setPrizes(prizeCount - removedCard.prize)
             console.log(removedCard);
         } else {
             newArr[index].hp = newHp;
@@ -104,6 +122,9 @@ const Main: () => React$Node = ({ route, navigation }) => {
         <ScreenBase>
             <View style={styles.main}>
                 <View style={styles.activePokemonZone}>
+                    <View style={styles.prizeZone}>
+                        <PrizeMgr prizeCount={prizeCount} setPrize={setPrizes} />
+                    </View>
                     {active.map((elem, i) => {
                         return (
                             <Card key={"Active" + i} type="active" card={elem} index={i} setHp={setCardHp} retreat={retreat}/>
