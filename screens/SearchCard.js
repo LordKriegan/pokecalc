@@ -87,7 +87,8 @@ const SearchCard: () => React$Node = ({ route, navigation }) => {
         let newCard = {
             name: card.name,
             uri: card.imageUrl,
-            hp: parseInt(card.hp)
+            hp: parseInt(card.hp),
+            dmg: 0
         }
         switch (card.subtype) {
             case "GX":

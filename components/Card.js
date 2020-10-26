@@ -37,10 +37,10 @@ const Card: () => React$Node = (props) => {
         <GestureRecognizer
             style={styles.container}
             onSwipeLeft={(state) => {
-                props.setHp(props.card.hp - 10, props.type, props.index);
+                props.setHp(props.card.dmg + 10, props.type, props.index);
             }}
             onSwipeRight={(state) => {
-                props.setHp(props.card.hp + 10, props.type, props.index);
+                props.setHp(props.card.dmg - 10, props.type, props.index);
             }}
             onSwipeUp={(state) => {
                 if (props.type === "bench" && props.promote) props.promote(props.index);
@@ -51,7 +51,7 @@ const Card: () => React$Node = (props) => {
         >
             {(isError) ? <Text numberOfLines={1} style={{...styles.cardText, top: "5%", zIndex: 1000, fontSize: (props.type === "active" ? 15 : 10), width: "80%"}}>{props.card.name}</Text> : null}
             <Image style={(props.type === "active") ? styles.activePokemonCard : styles.benchedPokemonCard} source={ (isError) ? require("../resources/cardback.png") : { uri: props.card.uri } } onError={({ nativeEvent: { error } }) => setError(true)} />
-            <Text style={{ ...styles.cardText, bottom: "10%", fontSize: (props.type === "active" ? 50 : 25) }}>{props.card.hp}</Text>
+            <Text style={{ ...styles.cardText, bottom: "10%", fontSize: (props.type === "active" ? 50 : 25) }}>{props.card.hp - props.card.dmg}</Text>
         </GestureRecognizer>
 
     );

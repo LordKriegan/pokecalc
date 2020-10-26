@@ -80,18 +80,21 @@ const Main: () => React$Node = ({ route, navigation }) => {
         }
         setPrizeCount(num)
     }
-    const setCardHp = (newHp, zone, index) => {
+
+    const setDmg = (dmg, zone, index) => {
         let newArr = [...(zone === "active") ? active : bench];
-        if (newHp <= 0) {
+        let card = newArr[index];
+        console.log(card, dmg)
+        if ((card.hp - dmg) <= 0) {
             let removedCard = newArr.splice(index, 1)[0];
-            setPrizes(prizeCount - removedCard.prize)
-            console.log(removedCard);
+            setPrizes(prizeCount - removedCard.prize);
         } else {
-            newArr[index].hp = newHp;
+            newArr[index].dmg = dmg;
         }
         if (zone === "active") setActive(newArr)
         else setBench(newArr)
     }
+
     const promote = (index) => {
         if (active.length < 2) {
             setActive([...active, { ...bench[index], ...status}]);
@@ -127,14 +130,14 @@ const Main: () => React$Node = ({ route, navigation }) => {
                     </View>
                     {active.map((elem, i) => {
                         return (
-                            <Card key={"Active" + i} type="active" card={elem} index={i} setHp={setCardHp} retreat={retreat}/>
+                            <Card key={"Active" + i} type="active" card={elem} index={i} setHp={setDmg} retreat={retreat}/>
                         )
                     })}
                 </View>
                 <View style={styles.benchedPokemonZone}>
                     {bench.map((elem, i) => {
                         return (
-                            <Card key={"Bench" + i} type="bench" card={elem} index={i} setHp={setCardHp} promote={promote} />
+                            <Card key={"Bench" + i} type="bench" card={elem} index={i} setHp={setDmg} promote={promote} />
                         )
                     })}
                     {((active.length + bench.length) < 6) ? <TouchableOpacity style={styles.addCardBtn} onPress={gotoCardLookup}>
