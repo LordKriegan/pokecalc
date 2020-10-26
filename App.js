@@ -16,7 +16,7 @@ import { Main, SearchCard } from './screens';
 
 const Stack = createStackNavigator();
 
-const App: () => React$Node = () => {
+const App = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator

@@ -12,7 +12,7 @@ const styles = StyleSheet.create({
     }
 });
 
-const ScreenBase: () => React$Node = (props) => {
+const ScreenBase = (props) => {
 
     return (
         <>

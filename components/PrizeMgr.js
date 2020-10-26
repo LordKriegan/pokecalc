@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
     }
 })
 
-const PrizeMgr: () => React$Node = ({ prizeCount, setPrize }) => {
+const PrizeMgr = ({ prizeCount, setPrize }) => {
 
     let prizeImg
     switch (true) {

@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
     }
 });
 
-const SearchCard: () => React$Node = ({ route, navigation }) => {
+const SearchCard = ({ route, navigation }) => {
     const [cardList, setCardList] = useState([]);
     const [name, onChangeName] = React.useState('');
     const [hp, onChangeHP] = React.useState('');

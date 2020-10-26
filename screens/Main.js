@@ -55,7 +55,7 @@ const status = {
     confused: 0
 }
 
-const Main: () => React$Node = ({ route, navigation }) => {
+const Main = ({ route, navigation }) => {
 
     const [active, setActive] = useState([]);
     const [bench, setBench] = useState([]);

@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
     }
 });
 
-const Card: () => React$Node = (props) => {
+const Card = (props) => {
     const [isError, setError] = useState(false);
     return (
 

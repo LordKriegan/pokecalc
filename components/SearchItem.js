@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
     }
 });
 
-const SearchItem: () => React$Node = (props) => {
+const SearchItem = (props) => {
     const [isError, setError] = useState(false);
     return (
         <View style={styles.container}>
