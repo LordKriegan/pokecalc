@@ -64,11 +64,11 @@ const styles = StyleSheet.create({
 });
 
 const status = {
-    paralyzed: 0,
-    burned: 0,
-    asleep: 0,
-    poisoned: 0,
-    confused: 0
+    paralyzed: false,
+    burned: false,
+    asleep: false,
+    poisoned: false,
+    confused: false
 }
 
 const Main = ({ route, navigation }) => {
@@ -162,10 +162,14 @@ const Main = ({ route, navigation }) => {
                 >
                     <View style={styles.modal}>
                         <View style={styles.modalBox}>
-                            {(modalContent.zone === "active") ? 
-                            <Text>Active Zone</Text>
-                            :
-                            <Text>Benched Zone</Text>
+                            {(modalContent.zone === "active") ?
+                                (active[modalContent.index]) ?
+                                    <Text>{active[modalContent.index].name}</Text>
+                                    : null
+                                :
+                                (bench[modalContent.index]) ?
+                                    <Text>{bench[modalContent.index].name}</Text>
+                                    : null
                             }
                             <TouchableOpacity onPress={() => setModalVisible(false)}><Text>Close</Text></TouchableOpacity>
                         </View>
