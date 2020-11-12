@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, Image, Text } from 'react-native';
+import { StyleSheet, Image, Text, Pressable } from 'react-native';
 import GestureRecognizer, { swipeDirections } from 'react-native-swipe-gestures';
 
 const styles = StyleSheet.create({
@@ -10,12 +10,10 @@ const styles = StyleSheet.create({
         width: "15%"
     },
     activePokemonCard: {
-        resizeMode: "stretch",
         height: "80%",
-        width: "100%"
+        width: "100%",
     },
     benchedPokemonCard: {
-        resizeMode: "stretch",
         height: "60%",
         width: "80%"
     },
@@ -49,8 +47,11 @@ const Card = (props) => {
                 if (props.type === "active" && props.retreat) props.retreat(props.index);
             }}
         >
-            {(isError) ? <Text numberOfLines={1} style={{...styles.cardText, top: "5%", zIndex: 1000, fontSize: (props.type === "active" ? 15 : 10), width: "80%"}}>{props.card.name}</Text> : null}
-            <Image style={(props.type === "active") ? styles.activePokemonCard : styles.benchedPokemonCard} source={ (isError) ? require("../resources/cardback.png") : { uri: props.card.uri } } onError={({ nativeEvent: { error } }) => setError(true)} />
+            {(isError) ? <Text numberOfLines={1} style={{ ...styles.cardText, top: "5%", zIndex: 1000, fontSize: (props.type === "active" ? 15 : 10), width: "80%" }}>{props.card.name}</Text> : null}
+            <Pressable style={(props.type === "active") ? styles.activePokemonCard : styles.benchedPokemonCard} onLongPress={() => props.onLongPress(props.type, props.index)}>
+                <Image style={{ resizeMode: "stretch", height: "100%", width: "100%" }} source={(isError) ? require("../resources/cardback.png") : { uri: props.card.uri }} onError={({ nativeEvent: { error } }) => setError(true)} />
+            </Pressable>
+
             <Text style={{ ...styles.cardText, bottom: "10%", fontSize: (props.type === "active" ? 50 : 25) }}>{props.card.hp - props.card.dmg}</Text>
         </GestureRecognizer>
 
