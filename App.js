@@ -11,7 +11,6 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
-import { ScreenBase } from './components';
 import { Main, SearchCard } from './screens';
 
 const Stack = createStackNavigator();

@@ -10,57 +10,11 @@
  */
 
 import React, { useState } from 'react';
-import { View, StyleSheet, TouchableOpacity, Text, Image, ScrollView, TextInput } from 'react-native';
-import { ScreenBase, SearchItem } from '../components';
+import { View, TouchableOpacity, Text, ScrollView, TextInput } from 'react-native';
+import { ScreenBase } from '../../components'; //shared comps
+import { SearchItem } from './components'; //local comps
 import axios from 'axios';
-
-
-
-const styles = StyleSheet.create({
-    container: {
-        width: "90%",
-        height: "80%",
-        flexDirection: "column",
-        borderRadius: 10,
-        marginTop: "5%",
-        marginBottom: "5%",
-        alignSelf: "center",
-        alignItems: "center"
-    },
-    searchBtn: {
-        borderRadius: 10,
-        backgroundColor: "gray",
-        padding: 5,
-        justifyContent: "center",
-        margin: 5
-    },
-    textInput: {
-        backgroundColor: "white",
-        borderRadius: 10,
-        textAlign: "center"
-    },
-    nameInput: {
-        width: "60%",
-        margin: 5
-    },
-    hpInput: {
-        width: "20%",
-        margin: 5
-    },
-    inputBox: {
-        flexDirection: "row"
-    },
-    cardList: {
-        width: "100%",
-    },
-    cardListItem: {
-        resizeMode: "stretch",
-        height: 250,
-        width: 150,
-        marginLeft: 5,
-        marginRight: 5
-    }
-});
+import styles from './styles';
 
 const SearchCard = ({ route, navigation }) => {
     const [cardList, setCardList] = useState([]);
