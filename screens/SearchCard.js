@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
         flexDirection: "row"
     },
     cardList: {
-        width: "100%", 
+        width: "100%",
     },
     cardListItem: {
         resizeMode: "stretch",
@@ -64,14 +64,15 @@ const styles = StyleSheet.create({
 
 const SearchCard = ({ route, navigation }) => {
     const [cardList, setCardList] = useState([]);
-    const [name, onChangeName] = React.useState('');
-    const [hp, onChangeHP] = React.useState('');
+    const [name, onChangeName] = useState('');
+    const [hp, onChangeHP] = useState('');
 
     const findCard = () => {
         if (name === "") return
         let apiUrl = `https://api.pokemontcg.io/v1/cards?supertype=pokemon&name=${name}`;
         if (hp !== "") apiUrl += `&hp=${hp}`;
-        if (route.params?.evolvesFrom && route.params?.evolvesFrom !== "") apiUrl += `&evolvesFrom=${route.params?.evolvesFrom}`; // instead of checking for an empty string, check to see if evolvesfrom is a navigation prop
+        console.log(route.params)
+        if (route.params?.evolve && route.params?.evolve.name !== "") apiUrl += `&evolvesFrom=${route.params?.evolve.name}`;
         console.log(apiUrl)
         axios
             .get(apiUrl)
@@ -106,9 +107,23 @@ const SearchCard = ({ route, navigation }) => {
     }
 
     const benchAndReturnToMain = (card) => {
-        navigation.navigate("Main", {
-            newCard: card
-        })
+        let options = {}
+        console.log("route params in cardlookup", route.params)
+        if (route.params?.evolve) {
+            options = {
+                evolve: {
+                    newCard: card,
+                    zone: route.params.evolve.zone,
+                    index: route.params.evolve.index,
+                }
+            }
+        } else {
+            options = {
+                newCard: card,
+            }
+        }
+        console.log(options)
+        navigation.navigate("Main", options)
     }
     // const handleOnChangeHp = (text) => {
     //     if (/^\d+$/.test(text)) onChangeHP(text);
@@ -122,18 +137,18 @@ const SearchCard = ({ route, navigation }) => {
                     <TouchableOpacity onPress={findCard} style={styles.searchBtn}><Text style={{ color: 'white' }}>Search</Text></TouchableOpacity>
                 </View>
                 <ScrollView style={styles.cardList} horizontal={true}>
-                    <View style={{flexDirection: "row", flexWrap: "wrap"}}>
+                    <View style={{ flexDirection: "row", flexWrap: "wrap" }}>
                         {cardList.map((elem, i) => {
-                        return (
-       
-                            <TouchableOpacity key={elem.uri} onLongPress={() => benchAndReturnToMain(elem)}>
-                                <SearchItem  card={elem} styleImg={styles.cardListItem} />
-                            </TouchableOpacity>
-                        )
-                    })}
+                            return (
+
+                                <TouchableOpacity key={elem.uri} onLongPress={() => benchAndReturnToMain(elem)}>
+                                    <SearchItem card={elem} styleImg={styles.cardListItem} />
+                                </TouchableOpacity>
+                            )
+                        })}
                     </View>
                 </ScrollView>
-                
+
             </View>
         </ScreenBase>
     )

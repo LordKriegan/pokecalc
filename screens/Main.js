@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, TouchableOpacity, Text, Modal } from 'react-native';
-import { ScreenBase, Card, PrizeMgr } from '../components';
+import { View, StyleSheet, TouchableOpacity, Text, Modal, TextInput, ScrollView, Image, Pressable } from 'react-native';
+import { ScreenBase, Card, PrizeMgr, MyBtn } from '../components';
 
 const styles = StyleSheet.create({
     main: {
@@ -46,6 +46,7 @@ const styles = StyleSheet.create({
         height: "100%",
     },
     modalBox: {
+
         margin: 20,
         backgroundColor: "white",
         borderRadius: 20,
@@ -53,6 +54,8 @@ const styles = StyleSheet.create({
         alignItems: "center",
         width: "50%",
         backgroundColor: "rgba(220,220,220, 0.8)",
+        flexDirection: "row",
+        zIndex: 1000
     },
     modal: {
         flex: 1,
@@ -60,6 +63,27 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
         marginTop: 22,
+    },
+    setHpInput: {
+        backgroundColor: "white",
+        borderRadius: 10,
+        textAlign: "center",
+        margin: 1,
+        padding: 0,
+        width: "100%"
+    },
+    setHpBox: {
+        margin: 1,
+        width: "100%"
+    },
+    modalImage: {
+        width: "40%",
+        height: "100%",
+        resizeMode: "contain",
+        marginRight: "10%",
+    },
+    modalButtonsBox: {
+        width: "50%"
     }
 });
 
@@ -81,13 +105,30 @@ const Main = ({ route, navigation }) => {
         zone: "active",
         index: 0
     });
+    const [hpInputText, setHpInputText] = useState("")
+
     useEffect(() => {
-        if (route.params?.newCard) addCard(route.params.newCard)
+
+        if (route.params?.newCard) {
+            addCard(route.params.newCard)
+        }
     }, [route.params?.newCard])
+
+
+    useEffect(() => {
+        if (route.params?.evolve) {
+            let { zone, index, newCard } = route.params.evolve;
+            let newArr = [...(zone === "active") ? active : bench]
+            newCard.dmg = newArr[index].dmg
+            newArr[index] = newCard;
+            if (zone === "active") setActive(newArr);
+            else setBench(newArr);
+        }
+    }, [route.params?.evolve])
 
     const addCard = (card) => {
         if (active.length + bench.length >= 6) return
-        if (active.length === 0) {
+        if (!active.length && !bench.length) {
             setActive([...active, { ...card, ...status }])
         } else {
             setBench([...bench, { ...card }])
@@ -143,7 +184,7 @@ const Main = ({ route, navigation }) => {
         }
     }
     const gotoCardLookup = () => {
-        navigation.navigate("CardLookup")
+        navigation.navigate("CardLookup", {})
     }
     const openModal = (zone, index) => {
         setModalContent({
@@ -151,6 +192,48 @@ const Main = ({ route, navigation }) => {
             index
         })
         setModalVisible(true)
+        const card = [...(zone === "active") ? active : bench][index]
+        setHpInputText((card.hp - card.dmg).toString())
+    }
+    const scoopUp = (zone, index) => {
+        let newArr = [...(zone === "active") ? active : bench];
+        newArr.splice(index, 1);
+        if (zone === "active") setActive(newArr);
+        else setBench(newArr);
+        if (modalVisible) setModalVisible(false);
+    }
+
+    const knockOut = (zone, index) => {
+        let card = [...(zone === "active") ? active : bench][index];
+        scoopUp(zone, index);
+        setPrizeCount(prizeCount - card.prize);
+    }
+
+    const setHp = (zone, index, hp) => {
+        let card = [...(zone === "active") ? active : bench][index];
+        let dmg = card.hp - hp;
+        setDmg(dmg, zone, index);
+
+    }
+    //only for hp input text :P sourced from answer on https://stackoverflow.com/questions/32946793/react-native-textinput-that-only-accepts-numeric-characters
+    const validateInputs = (text) => {
+        let numreg = /^[0-9]+$/;
+        if (numreg.test(text) || text.length === 0) {
+            setHpInputText(text);
+        } else {
+            return;
+        }
+    }
+    const evolvePokemon = (zone, index) => {
+        setModalVisible(false);
+        let { name } = [...(zone === "active") ? active : bench][index];
+        navigation.navigate("CardLookup", {
+            evolve: {
+                zone,
+                index,
+                name
+            }
+        })
     }
     return (
         <ScreenBase>
@@ -160,20 +243,38 @@ const Main = ({ route, navigation }) => {
                     transparent={true}
                     visible={modalVisible}
                 >
-                    <View style={styles.modal}>
-                        <View style={styles.modalBox}>
+                    <Pressable onPress={() => setModalVisible(false)} style={styles.modal}>
+                        <Pressable onPress={() => {/*just preventing the rest of this box from being pressable*/ }} style={styles.modalBox}>
                             {(modalContent.zone === "active") ?
                                 (active[modalContent.index]) ?
-                                    <Text>{active[modalContent.index].name}</Text>
+                                    <Image style={styles.modalImage} source={{ uri: [...active][modalContent.index].uri }} />
                                     : null
                                 :
                                 (bench[modalContent.index]) ?
-                                    <Text>{bench[modalContent.index].name}</Text>
+                                    <Image style={styles.modalImage} source={{ uri: [...bench][modalContent.index].uri }} />
                                     : null
                             }
-                            <TouchableOpacity onPress={() => setModalVisible(false)}><Text>Close</Text></TouchableOpacity>
-                        </View>
-                    </View>
+                            <View style={styles.modalButtonsBox}>
+                                <ScrollView
+                                    persistentScrollbar={true}>
+                                    <View style={styles.setHpBox}>
+                                        <TextInput
+                                            value={hpInputText}
+                                            onChangeText={text => validateInputs(text)}
+                                            style={styles.setHpInput}
+                                            keyboardType="numeric"
+                                        />
+                                        <MyBtn label="Set Hp" handler={() => { setHp(modalContent.zone, modalContent.index, hpInputText) }} />
+                                    </View>
+                                    <MyBtn label="Evolve" handler={() => { evolvePokemon(modalContent.zone, modalContent.index) }} />
+                                    <MyBtn label="Knock Out" handler={() => { knockOut(modalContent.zone, modalContent.index) }} />
+                                    <MyBtn label="Scoop Up" handler={() => { scoopUp(modalContent.zone, modalContent.index) }} />
+
+                                </ScrollView>
+                                <MyBtn label="Close" handler={() => setModalVisible(false)} />
+                            </View>
+                        </Pressable>
+                    </Pressable>
 
                 </Modal>
                 <View style={styles.activePokemonZone}>
