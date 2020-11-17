@@ -1,10 +1,6 @@
 import { StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
-    main: {
-        flex: 1,
-        flexDirection: "column"
-    },
     modalBox: {
         margin: 20,
         backgroundColor: "white",

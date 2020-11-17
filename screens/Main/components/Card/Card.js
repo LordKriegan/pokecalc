@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Image, Text, Pressable } from 'react-native';
+import { Image, Text } from 'react-native';
 import { DoubleTap } from '../../../../components';
 import GestureRecognizer, { swipeDirections } from 'react-native-swipe-gestures';
 import styles from './styles';

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { View, TouchableOpacity, Text, Modal, TextInput, ScrollView, Image, Pressable } from 'react-native';
-import { ScreenBase,  MyBtn } from '../../components'; //shared comps
-import { PrizeMgr, Card } from './components'; //local comps
+import { View } from 'react-native';
+import { ScreenBase } from '../../components'; //shared comps
+import { Active, Bench, MyModal } from './components'; //local comps
 import styles from './styles.js'
 
 const status = {
@@ -18,14 +18,13 @@ const Main = ({ route, navigation }) => {
     const [bench, setBench] = useState([]);
     const [prizeCount, setPrizeCount] = useState(6);
     const [modalVisible, setModalVisible] = useState(false);
+    const [hpInputText, setHpInputText] = useState("");
     const [modalContent, setModalContent] = useState({
         zone: "active",
         index: 0
     });
-    const [hpInputText, setHpInputText] = useState("")
 
     useEffect(() => {
-
         if (route.params?.newCard) {
             addCard(route.params.newCard)
         }
@@ -130,17 +129,9 @@ const Main = ({ route, navigation }) => {
         let card = [...(zone === "active") ? active : bench][index];
         let dmg = card.hp - hp;
         setDmg(dmg, zone, index);
-
+        setModalVisible(false)
     }
-    //only for hp input text :P sourced from answer on https://stackoverflow.com/questions/32946793/react-native-textinput-that-only-accepts-numeric-characters
-    const validateInputs = (text) => {
-        let numreg = /^[0-9]+$/;
-        if (numreg.test(text) || text.length === 0) {
-            setHpInputText(text);
-        } else {
-            return;
-        }
-    }
+   
     const evolvePokemon = (zone, index) => {
         setModalVisible(false);
         let { name } = [...(zone === "active") ? active : bench][index];
@@ -155,64 +146,35 @@ const Main = ({ route, navigation }) => {
     return (
         <ScreenBase>
             <View style={styles.main}>
-                <Modal
-                    animationType="slide"
-                    transparent={true}
-                    visible={modalVisible}
-                >
-                    <Pressable onPress={() => setModalVisible(false)} style={styles.modal}>
-                        <Pressable onPress={() => {/*just preventing the rest of this box from being pressable*/ }} style={styles.modalBox}>
-                            {(modalContent.zone === "active") ?
-                                (active[modalContent.index]) ?
-                                    <Image style={styles.modalImage} source={{ uri: [...active][modalContent.index].uri }} />
-                                    : null
-                                :
-                                (bench[modalContent.index]) ?
-                                    <Image style={styles.modalImage} source={{ uri: [...bench][modalContent.index].uri }} />
-                                    : null
-                            }
-                            <View style={styles.modalButtonsBox}>
-                                <ScrollView
-                                    persistentScrollbar={true}>
-                                    <View style={styles.setHpBox}>
-                                        <TextInput
-                                            value={hpInputText}
-                                            onChangeText={text => validateInputs(text)}
-                                            style={styles.setHpInput}
-                                            keyboardType="numeric"
-                                        />
-                                        <MyBtn label="Set Hp" handler={() => { setHp(modalContent.zone, modalContent.index, hpInputText) }} />
-                                    </View>
-                                    <MyBtn label="Evolve" handler={() => { evolvePokemon(modalContent.zone, modalContent.index) }} />
-                                    <MyBtn label="Knock Out" handler={() => { knockOut(modalContent.zone, modalContent.index) }} />
-                                    <MyBtn label="Scoop Up" handler={() => { scoopUp(modalContent.zone, modalContent.index) }} />
-
-                                </ScrollView>
-                                <MyBtn label="Close" handler={() => setModalVisible(false)} />
-                            </View>
-                        </Pressable>
-                    </Pressable>
-                </Modal>
-                <View style={styles.activePokemonZone}>
-                    <View style={styles.prizeZone}>
-                        <PrizeMgr prizeCount={prizeCount} setPrize={setPrizes} />
-                    </View>
-                    {active.map((elem, i) => {
-                        return (
-                            <Card key={"Active" + i} type="active" card={elem} index={i} setHp={setDmg} retreat={retreat} handler={openModal} />
-                        )
-                    })}
-                </View>
-                <View style={styles.benchedPokemonZone}>
-                    {bench.map((elem, i) => {
-                        return (
-                            <Card key={"Bench" + i} type="bench" card={elem} index={i} setHp={setDmg} promote={promote} handler={openModal} />
-                        )
-                    })}
-                    {((active.length + bench.length) < 6) ? <TouchableOpacity style={styles.addCardBtn} onPress={gotoCardLookup}>
-                        <Text style={styles.addCardBtnTxt}>+</Text>
-                    </TouchableOpacity> : null}
-                </View>
+                <MyModal 
+                    modalVisible={modalVisible}
+                    setModalVisible={setModalVisible}
+                    active={active}
+                    bench={bench}
+                    modalContent={modalContent}
+                    setHp={setHp}
+                    knockOut={knockOut}
+                    scoopUp={scoopUp}
+                    evolvePokemon={evolvePokemon}
+                    hpInputText={hpInputText}
+                    setHpInputText={setHpInputText}
+                    />
+                <Active
+                    active={active}
+                    prizeCount={prizeCount}
+                    setPrizes={setPrizes}
+                    setDmg={setDmg}
+                    retreat={retreat}
+                    openModal={openModal}
+                    />
+                <Bench
+                    active={active}
+                    bench={bench}
+                    setDmg={setDmg}
+                    promote={promote}
+                    openModal={openModal}
+                    gotoCardLookup={gotoCardLookup}
+                    />
             </View>
         </ScreenBase>
     );
