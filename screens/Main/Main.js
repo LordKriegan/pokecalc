@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, TouchableOpacity, Text, Modal, TextInput, ScrollView, Image, Pressable } from 'react-native';
-import { ScreenBase, Card,  MyBtn } from '../../components'; //shared comps
-import { PrizeMgr } from './components'; //local comps
+import { View, TouchableOpacity, Text, Modal, TextInput, ScrollView, Image, Pressable } from 'react-native';
+import { ScreenBase,  MyBtn } from '../../components'; //shared comps
+import { PrizeMgr, Card } from './components'; //local comps
 import styles from './styles.js'
 
 const status = {
@@ -199,14 +199,14 @@ const Main = ({ route, navigation }) => {
                     </View>
                     {active.map((elem, i) => {
                         return (
-                            <Card key={"Active" + i} type="active" card={elem} index={i} setHp={setDmg} retreat={retreat} onLongPress={openModal} />
+                            <Card key={"Active" + i} type="active" card={elem} index={i} setHp={setDmg} retreat={retreat} handler={openModal} />
                         )
                     })}
                 </View>
                 <View style={styles.benchedPokemonZone}>
                     {bench.map((elem, i) => {
                         return (
-                            <Card key={"Bench" + i} type="bench" card={elem} index={i} setHp={setDmg} promote={promote} onLongPress={openModal} />
+                            <Card key={"Bench" + i} type="bench" card={elem} index={i} setHp={setDmg} promote={promote} handler={openModal} />
                         )
                     })}
                     {((active.length + bench.length) < 6) ? <TouchableOpacity style={styles.addCardBtn} onPress={gotoCardLookup}>

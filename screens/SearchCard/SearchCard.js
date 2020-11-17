@@ -11,7 +11,7 @@
 
 import React, { useState } from 'react';
 import { View, TouchableOpacity, Text, ScrollView, TextInput } from 'react-native';
-import { ScreenBase } from '../../components'; //shared comps
+import { ScreenBase, DoubleTap } from '../../components'; //shared comps
 import { SearchItem } from './components'; //local comps
 import axios from 'axios';
 import styles from './styles';
@@ -95,9 +95,9 @@ const SearchCard = ({ route, navigation }) => {
                         {cardList.map((elem, i) => {
                             return (
 
-                                <TouchableOpacity key={elem.uri} onLongPress={() => benchAndReturnToMain(elem)}>
+                                <DoubleTap key={elem.uri} handler={() => benchAndReturnToMain(elem)}>
                                     <SearchItem card={elem} styleImg={styles.cardListItem} />
-                                </TouchableOpacity>
+                                </DoubleTap>
                             )
                         })}
                     </View>

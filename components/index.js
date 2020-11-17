@@ -1,9 +1,10 @@
 import ScreenBase from './ScreenBase';
-import Card from './Card';
 import MyBtn from './MyBtn';
+import DoubleTap from './DoubleTap';
 
 export {
     ScreenBase,
-    Card,
-    MyBtn
+  
+    MyBtn,
+    DoubleTap
 }
