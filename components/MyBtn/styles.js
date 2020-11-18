@@ -6,7 +6,6 @@ const styles = StyleSheet.create({
         padding: 3,
         backgroundColor: "rgb(82,82,82)",
         margin: 1,
-        width: "100%",
         height: 25 
     },
     label: {
