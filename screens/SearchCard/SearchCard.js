@@ -11,7 +11,7 @@
 
 import React, { useState } from 'react';
 import { View, TouchableOpacity, Text, ScrollView, TextInput } from 'react-native';
-import { ScreenBase, DoubleTap } from '../../components'; //shared comps
+import { ScreenBase, DoubleTap, MyBtn } from '../../components'; //shared comps
 import { SearchItem } from './components'; //local comps
 import axios from 'axios';
 import styles from './styles';
@@ -93,7 +93,7 @@ const SearchCard = ({ route, navigation }) => {
                 <View style={styles.inputBox}>
                     <TextInput style={{ ...styles.nameInput, ...styles.textInput }} onChangeText={text => onChangeName(text)} value={name} placeholder="Name" />
                     <TextInput style={{ ...styles.hpInput, ...styles.textInput }} onChangeText={text => validateInputs(text)} value={hp} placeholder="HP" keyboardType="numeric" />
-                    <TouchableOpacity onPress={findCard} style={styles.searchBtn}><Text style={{ color: 'white' }}>Search</Text></TouchableOpacity>
+                    <MyBtn style={styles.searchBtn} label="Search" handler={findCard} />
                 </View>
                 <ScrollView style={styles.cardList} horizontal={true}>
                     <View style={{ flexDirection: "row", flexWrap: "wrap" }}>

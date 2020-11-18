@@ -13,10 +13,10 @@ const styles = StyleSheet.create({
     },
     searchBtn: {
         borderRadius: 10,
-        backgroundColor: "gray",
         padding: 5,
         justifyContent: "center",
-        margin: 5
+        margin: 5,
+        backgroundColor: "rgb(82,82,82)",
     },
     textInput: {
         backgroundColor: "white",
