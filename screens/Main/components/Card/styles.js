@@ -23,6 +23,19 @@ const styles = StyleSheet.create({
         textAlign: "center",
         textAlignVertical: "center",
         position: "absolute",
+    }, 
+    statusBox: {
+        width: "100%",
+        height: "25%",
+        position: "absolute",
+        top: "15%",
+        flexDirection: "row",
+        justifyContent: "center"
+    },
+    status: {
+        height: "100%",
+        width: "20%",
+        resizeMode: "contain"
     }
 });
 

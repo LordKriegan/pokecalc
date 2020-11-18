@@ -143,6 +143,12 @@ const Main = ({ route, navigation }) => {
             }
         })
     }
+
+    const setStatus = (index, status) => {
+        const newArr = [...active];
+        newArr[index][status] = !newArr[index][status];
+        setActive(newArr);
+    }
     return (
         <ScreenBase>
             <View style={styles.main}>
@@ -158,6 +164,9 @@ const Main = ({ route, navigation }) => {
                     evolvePokemon={evolvePokemon}
                     hpInputText={hpInputText}
                     setHpInputText={setHpInputText}
+                    setStatus={setStatus}
+                    promote={promote}
+                    retreat={retreat}
                     />
                 <Active
                     active={active}

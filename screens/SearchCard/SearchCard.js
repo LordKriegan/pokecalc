@@ -79,15 +79,20 @@ const SearchCard = ({ route, navigation }) => {
         console.log(options)
         navigation.navigate("Main", options)
     }
-    // const handleOnChangeHp = (text) => {
-    //     if (/^\d+$/.test(text)) onChangeHP(text);
-    // }
+    const validateInputs = (text) => {
+        let numreg = /^[0-9]+$/;
+        if (numreg.test(text) || text.length === 0) {
+            onChangeHP(text);
+        } else {
+            return;
+        }
+    }
     return (
         <ScreenBase>
             <View style={styles.container}>
                 <View style={styles.inputBox}>
                     <TextInput style={{ ...styles.nameInput, ...styles.textInput }} onChangeText={text => onChangeName(text)} value={name} placeholder="Name" />
-                    <TextInput style={{ ...styles.hpInput, ...styles.textInput }} onChangeText={text => onChangeHP(text)} value={hp} placeholder="HP" keyboardType="numeric" />
+                    <TextInput style={{ ...styles.hpInput, ...styles.textInput }} onChangeText={text => validateInputs(text)} value={hp} placeholder="HP" keyboardType="numeric" />
                     <TouchableOpacity onPress={findCard} style={styles.searchBtn}><Text style={{ color: 'white' }}>Search</Text></TouchableOpacity>
                 </View>
                 <ScrollView style={styles.cardList} horizontal={true}>
