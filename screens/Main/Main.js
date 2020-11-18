@@ -146,6 +146,9 @@ const Main = ({ route, navigation }) => {
 
     const setStatus = (index, status) => {
         const newArr = [...active];
+        if (status === "asleep") if (newArr[index].paralyzed || newArr[index].confused) return;
+        if (status === "confused") if (newArr[index].paralyzed || newArr[index].asleep) return;
+        if (status === "paralyzed") if (newArr[index].asleep || newArr[index].confused) return;
         newArr[index][status] = !newArr[index][status];
         setActive(newArr);
     }
