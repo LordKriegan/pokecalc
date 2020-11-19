@@ -3,7 +3,6 @@ import { StyleSheet } from 'react-native';
 const styles = StyleSheet.create({
     modalBox: {
         margin: 20,
-        backgroundColor: "white",
         borderRadius: 20,
         padding: 35,
         alignItems: "center",
@@ -17,7 +16,7 @@ const styles = StyleSheet.create({
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
-        marginTop: 22,
+        
     },
     setHpInput: {
         backgroundColor: "white",

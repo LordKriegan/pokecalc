@@ -13,23 +13,11 @@ const status = {
 }
 
 const Main = ({ route, navigation }) => {
-
-    const [active, setActive] = useState([]);
-    const [bench, setBench] = useState([]);
-    const [prizeCount, setPrizeCount] = useState(6);
-    const [modalVisible, setModalVisible] = useState(false);
-    const [hpInputText, setHpInputText] = useState("");
-    const [modalContent, setModalContent] = useState({
-        zone: "active",
-        index: 0
-    });
-
     useEffect(() => {
         if (route.params?.newCard) {
             addCard(route.params.newCard)
         }
-    }, [route.params?.newCard])
-
+    }, [route.params?.newCard]);
 
     useEffect(() => {
         if (route.params?.evolve) {
@@ -40,29 +28,53 @@ const Main = ({ route, navigation }) => {
             if (zone === "active") setActive(newArr);
             else setBench(newArr);
         }
-    }, [route.params?.evolve])
+    }, [route.params?.evolve]);
 
+    const [active, setActive] = useState([]);
+    const [bench, setBench] = useState([]);
+    const [prizeCount, setPrizeCount] = useState(6);
+    const [modalVisible, setModalVisible] = useState(false);
+    const [hpInputText, setHpInputText] = useState("");
+    const [modalContent, setModalContent] = useState({
+        zone: "active",
+        index: 0
+    });
+    const [history, setHistory] = useState([]);
+    
     const addCard = (card) => {
         if (active.length + bench.length >= 6) return
-        if (!active.length && !bench.length) {
+        if (!active.length && !bench.length) { 
+            setHistory([...history, `Added ${card.name} to active!`])
             setActive([...active, { ...card, ...status }])
         } else {
+            setHistory([...history, `Added ${card.name} to bench!`])
             setBench([...bench, { ...card }])
         }
     }
     const setPrizes = (num) => {
         if (num <= 0) {
             //handle game over
-            setPrizeCount(0);
+            resetGame();
             return
         }
+        const diff = prizeCount - num;
+        const msg = (diff >= 0) ? `Lost ${diff} prize${(diff > 1) ? s : ''}!` : `Gained ${diff * -1} prize${(diff * -1 > 1) ? 's': ''}!`;
+        setHistory([...history, msg])
         setPrizeCount(num)
+    }
+    const resetGame = () => {
+        setActive([]);
+        setBench([]);
+        setHistory([]);
+        setPrizeCount(6);
+        //generate ad at some point
     }
 
     const setDmg = (dmg, zone, index) => {
         let newArr = [...(zone === "active") ? active : bench];
         let card = newArr[index];
-        console.log("dmg applied: ", card.dmg - dmg)
+        let dmgApplied = card.dmg - dmg
+        setHistory([...history, `${card.name} ${(dmgApplied >= 0) ? "gained" : "lost"} ${(dmgApplied >= 0) ?dmgApplied : dmgApplied * -1} hitpoints!`])
         if ((card.hp - dmg) <= 0) {
             let removedCard = newArr.splice(index, 1)[0];
             setPrizes(prizeCount - removedCard.prize);
@@ -75,6 +87,7 @@ const Main = ({ route, navigation }) => {
 
     const promote = (index) => {
         if (active.length < 2) {
+            setHistory([...history, `${bench[index].name} was promoted to the active zone!`])
             setActive([...active, { ...bench[index], ...status }]);
             let newBench = [...bench];
             newBench.splice(index, 1);
@@ -83,8 +96,8 @@ const Main = ({ route, navigation }) => {
     }
     const retreat = (index) => {
         if (bench.length < 5) {
+            setHistory([...history, `${active[index].name} retreated to the bench!`])
             let retreatedActive = { ...active[index] }
-            console.log(retreatedActive.hp)
             let retreatedCard = {
                 uri: retreatedActive.uri,
                 hp: retreatedActive.hp,
@@ -92,7 +105,6 @@ const Main = ({ route, navigation }) => {
                 name: retreatedActive.name,
                 dmg: retreatedActive.dmg
             }
-            console.log(retreatedCard)
             setBench([...bench, retreatedCard]);
             let newActive = [...active];
             newActive.splice(index, 1);
@@ -111,8 +123,11 @@ const Main = ({ route, navigation }) => {
         const card = [...(zone === "active") ? active : bench][index]
         setHpInputText((card.hp - card.dmg).toString())
     }
-    const scoopUp = (zone, index) => {
+    const scoopUp = (zone, index, isKO) => {
         let newArr = [...(zone === "active") ? active : bench];
+
+        if (isKO) setHistory([...history, `${newArr[index].name} was knocked out!`, `Lost ${newArr[index].prize} prize${(newArr[index].prize > 1) ? 's' : ''}!`]);
+        else setHistory([...history, `${newArr[index].name} was scooped up!`]);
         newArr.splice(index, 1);
         if (zone === "active") setActive(newArr);
         else setBench(newArr);
@@ -121,7 +136,7 @@ const Main = ({ route, navigation }) => {
 
     const knockOut = (zone, index) => {
         let card = [...(zone === "active") ? active : bench][index];
-        scoopUp(zone, index);
+        scoopUp(zone, index, true);
         setPrizeCount(prizeCount - card.prize);
     }
 
@@ -131,7 +146,7 @@ const Main = ({ route, navigation }) => {
         setDmg(dmg, zone, index);
         setModalVisible(false)
     }
-   
+
     const evolvePokemon = (zone, index) => {
         setModalVisible(false);
         let { name } = [...(zone === "active") ? active : bench][index];
@@ -150,12 +165,13 @@ const Main = ({ route, navigation }) => {
         if (status === "confused") if (newArr[index].paralyzed || newArr[index].asleep) return;
         if (status === "paralyzed") if (newArr[index].asleep || newArr[index].confused) return;
         newArr[index][status] = !newArr[index][status];
+        setHistory([...history, `${active[index].name} is ${(newArr[index][status]) ? "now" : "no longer"} ${status}!`])
         setActive(newArr);
     }
     return (
         <ScreenBase>
             <View style={styles.main}>
-                <MyModal 
+                <MyModal
                     modalVisible={modalVisible}
                     setModalVisible={setModalVisible}
                     active={active}
@@ -170,7 +186,7 @@ const Main = ({ route, navigation }) => {
                     setStatus={setStatus}
                     promote={promote}
                     retreat={retreat}
-                    />
+                />
                 <Active
                     active={active}
                     prizeCount={prizeCount}
@@ -178,7 +194,9 @@ const Main = ({ route, navigation }) => {
                     setDmg={setDmg}
                     retreat={retreat}
                     openModal={openModal}
-                    />
+                    resetGame={resetGame}
+                    history={history}
+                />
                 <Bench
                     active={active}
                     bench={bench}
@@ -186,7 +204,7 @@ const Main = ({ route, navigation }) => {
                     promote={promote}
                     openModal={openModal}
                     gotoCardLookup={gotoCardLookup}
-                    />
+                />
             </View>
         </ScreenBase>
     );

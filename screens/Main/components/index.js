@@ -3,11 +3,13 @@ import Card from './Card';
 import Bench from './Bench';
 import Active from './Active';
 import MyModal from './MyModal';
+import MainMenu from './MainMenu';
 
 export {
     PrizeMgr,
     Card,
     Active,
     Bench,
-    MyModal
+    MyModal,
+    MainMenu
 }

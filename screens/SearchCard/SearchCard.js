@@ -49,9 +49,11 @@ const SearchCard = ({ route, navigation }) => {
             case "GX":
             case "EX":
             case "MEGA":
+            case "V":
                 newCard.prize = 2
                 break;
             case "TAG TEAM":
+            case "VMAX":
                 newCard.prize = 3
                 break;
             default:

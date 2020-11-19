@@ -16,6 +16,13 @@ const styles = StyleSheet.create({
         top: 30,
         width: "33%",
         height: "100%",
+    },
+    mainMenu: {
+        position: "absolute",
+        right: 5,
+        top: 30,
+        width: "33%",
+        height: "100%"
     }
 });
 

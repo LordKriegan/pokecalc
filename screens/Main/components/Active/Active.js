@@ -1,9 +1,9 @@
 import React from 'react';
-import { View } from 'react-native';
-import { Card, PrizeMgr } from '../'
+import { View, ImagePropTypes } from 'react-native';
+import { Card, PrizeMgr, MainMenu } from '../'
 import styles from './styles';
 
-const Active = ({ active, prizeCount, setPrizes, setDmg, retreat, openModal }) => {
+const Active = ({ active, prizeCount, setPrizes, setDmg, retreat, openModal, resetGame, history }) => {
 
     return (
         <View style={styles.activePokemonZone}>
@@ -15,6 +15,13 @@ const Active = ({ active, prizeCount, setPrizes, setDmg, retreat, openModal }) =
                     <Card key={"Active" + i} type="active" card={elem} index={i} setHp={setDmg} retreat={retreat} handler={openModal} />
                 )
             })}
+            <View style={styles.mainMenu}>
+                <MainMenu
+                    resetGame={resetGame}
+                    history={history}
+                />
+            </View>
+
         </View>
     )
 }
