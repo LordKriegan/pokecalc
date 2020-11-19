@@ -4,6 +4,7 @@ import Bench from './Bench';
 import Active from './Active';
 import MyModal from './MyModal';
 import MainMenu from './MainMenu';
+import CoinModal from './CoinModal';
 
 export {
     PrizeMgr,
@@ -11,5 +12,6 @@ export {
     Active,
     Bench,
     MyModal,
-    MainMenu
+    MainMenu,
+    CoinModal
 }

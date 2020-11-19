@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View } from 'react-native';
 import { ScreenBase } from '../../components'; //shared comps
-import { Active, Bench, MyModal } from './components'; //local comps
+import { Active, Bench, MyModal, CoinModal } from './components'; //local comps
 import styles from './styles.js'
 
 const status = {
@@ -40,6 +40,7 @@ const Main = ({ route, navigation }) => {
         index: 0
     });
     const [history, setHistory] = useState([]);
+    const [coinModal, setCoinModal] = useState(false);
     
     const addCard = (card) => {
         if (active.length + bench.length >= 6) return
@@ -186,7 +187,12 @@ const Main = ({ route, navigation }) => {
                     setStatus={setStatus}
                     promote={promote}
                     retreat={retreat}
+                    
                 />
+                <CoinModal
+                    coinModalVisible={setCoinModal}
+                    coinModal={coinModal}
+                    />
                 <Active
                     active={active}
                     prizeCount={prizeCount}
@@ -196,6 +202,7 @@ const Main = ({ route, navigation }) => {
                     openModal={openModal}
                     resetGame={resetGame}
                     history={history}
+                    setCoinModal={setCoinModal}
                 />
                 <Bench
                     active={active}

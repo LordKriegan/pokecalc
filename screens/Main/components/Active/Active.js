@@ -3,7 +3,7 @@ import { View, ImagePropTypes } from 'react-native';
 import { Card, PrizeMgr, MainMenu } from '../'
 import styles from './styles';
 
-const Active = ({ active, prizeCount, setPrizes, setDmg, retreat, openModal, resetGame, history }) => {
+const Active = ({ active, prizeCount, setPrizes, setDmg, retreat, openModal, resetGame, history, setCoinModal }) => {
 
     return (
         <View style={styles.activePokemonZone}>
@@ -19,6 +19,7 @@ const Active = ({ active, prizeCount, setPrizes, setDmg, retreat, openModal, res
                 <MainMenu
                     resetGame={resetGame}
                     history={history}
+                    setCoinModal={setCoinModal}
                 />
             </View>
 

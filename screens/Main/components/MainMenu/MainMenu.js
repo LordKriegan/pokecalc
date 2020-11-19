@@ -1,26 +1,16 @@
 import React, { useRef } from 'react';
-import { ScrollView, FlatList, View, Text } from 'react-native';
+import { ScrollView, View, Text } from 'react-native';
 import { MyBtn } from '../../../../components';
 import styles from './styles';
 
-const MainMenu = ({ resetGame, history }) => {
+//animated scroll to bottom sourced from https://stackoverflow.com/questions/29310553/is-it-possible-to-keep-a-scrollview-scrolled-to-the-bottom
+
+const MainMenu = ({ resetGame, history, setCoinModal }) => {
     const scrollViewRef = useRef();
+    
     return (
         <>
 
-            {/* <FlatList
-                style={styles.historyBox}
-                data={history}
-                initialScrollIndex={history.length - 1}
-                renderItem={({ item }) => {
-                    return (
-                        <View style={styles.historyElemBox}>
-                            <Text style={styles.historyElem}>{item}</Text>
-                        </View>
-                    )
-                }}
-                keyExtractor={(item, index) => item + index}
-            /> */}
             <View style={styles.historyBox}>
                 <ScrollView
                     ref={scrollViewRef}
@@ -36,7 +26,7 @@ const MainMenu = ({ resetGame, history }) => {
                 </ScrollView>
             </View>
 
-            <MyBtn label="Flip Coin" handler={() => { }} />
+            <MyBtn label="Flip Coin" handler={() => { setCoinModal(true) }} />
             <MyBtn label="Reset" handler={resetGame} />
         </>
     )
