@@ -41,10 +41,10 @@ const Main = ({ route, navigation }) => {
     });
     const [history, setHistory] = useState([]);
     const [coinModal, setCoinModal] = useState(false);
-    
+
     const addCard = (card) => {
         if (active.length + bench.length >= 6) return
-        if (!active.length && !bench.length) { 
+        if (!active.length && !bench.length) {
             setHistory([...history, `Added ${card.name} to active!`])
             setActive([...active, { ...card, ...status }])
         } else {
@@ -52,22 +52,25 @@ const Main = ({ route, navigation }) => {
             setBench([...bench, { ...card }])
         }
     }
-    const setPrizes = (num) => {
-        if (num <= 0) {
-            //handle game over
-            resetGame();
-            return
-        }
+    const setPrizes = (num, knockedOutName) => {
+        if (num <= 0) num = 0;
+        let addHistory = [];
         const diff = prizeCount - num;
-        const msg = (diff >= 0) ? `Lost ${diff} prize${(diff > 1) ? s : ''}!` : `Gained ${diff * -1} prize${(diff * -1 > 1) ? 's': ''}!`;
-        setHistory([...history, msg])
+        if (knockedOutName) addHistory = [...addHistory, `${knockedOutName} was knocked out!`];
+        const msg = (diff >= 0) ? `Lost ${diff} prize${(diff > 1) ? 's' : ''}!` : `Gained ${diff * -1} prize${(diff * -1 > 1) ? 's' : ''}!`;
+        addHistory = [...addHistory, msg]
         setPrizeCount(num)
+        if (num <= 0) {
+            addHistory = [...addHistory, "Game Over!"];
+        }
+        setHistory([...history, ...addHistory])
     }
     const resetGame = () => {
         setActive([]);
         setBench([]);
         setHistory([]);
         setPrizeCount(6);
+        navigation.navigate("AdScreen");
         //generate ad at some point
     }
 
@@ -75,7 +78,7 @@ const Main = ({ route, navigation }) => {
         let newArr = [...(zone === "active") ? active : bench];
         let card = newArr[index];
         let dmgApplied = card.dmg - dmg
-        setHistory([...history, `${card.name} ${(dmgApplied >= 0) ? "gained" : "lost"} ${(dmgApplied >= 0) ?dmgApplied : dmgApplied * -1} hitpoints!`])
+        setHistory([...history, `${card.name} ${(dmgApplied >= 0) ? "gained" : "lost"} ${(dmgApplied >= 0) ? dmgApplied : dmgApplied * -1} hitpoints!`])
         if ((card.hp - dmg) <= 0) {
             let removedCard = newArr.splice(index, 1)[0];
             setPrizes(prizeCount - removedCard.prize);
@@ -124,11 +127,9 @@ const Main = ({ route, navigation }) => {
         const card = [...(zone === "active") ? active : bench][index]
         setHpInputText((card.hp - card.dmg).toString())
     }
-    const scoopUp = (zone, index, isKO) => {
+    const scoopUp = (zone, index) => {
         let newArr = [...(zone === "active") ? active : bench];
-
-        if (isKO) setHistory([...history, `${newArr[index].name} was knocked out!`, `Lost ${newArr[index].prize} prize${(newArr[index].prize > 1) ? 's' : ''}!`]);
-        else setHistory([...history, `${newArr[index].name} was scooped up!`]);
+        setHistory([...history, `${newArr[index].name} was scooped up!`]);
         newArr.splice(index, 1);
         if (zone === "active") setActive(newArr);
         else setBench(newArr);
@@ -137,8 +138,13 @@ const Main = ({ route, navigation }) => {
 
     const knockOut = (zone, index) => {
         let card = [...(zone === "active") ? active : bench][index];
-        scoopUp(zone, index, true);
-        setPrizeCount(prizeCount - card.prize);
+        let newArr = [...(zone === "active") ? active : bench];
+        setPrizes(prizeCount - card.prize, newArr[index].name);
+        newArr.splice(index, 1);
+        if (zone === "active") setActive(newArr);
+        else setBench(newArr);
+        if (modalVisible) setModalVisible(false);
+
     }
 
     const setHp = (zone, index, hp) => {
@@ -169,6 +175,7 @@ const Main = ({ route, navigation }) => {
         setHistory([...history, `${active[index].name} is ${(newArr[index][status]) ? "now" : "no longer"} ${status}!`])
         setActive(newArr);
     }
+    
     return (
         <ScreenBase>
             <View style={styles.main}>
@@ -187,12 +194,14 @@ const Main = ({ route, navigation }) => {
                     setStatus={setStatus}
                     promote={promote}
                     retreat={retreat}
-                    
+
                 />
                 <CoinModal
                     coinModalVisible={setCoinModal}
                     coinModal={coinModal}
-                    />
+                    setHistory={setHistory}
+                    history={history}
+                />
                 <Active
                     active={active}
                     prizeCount={prizeCount}

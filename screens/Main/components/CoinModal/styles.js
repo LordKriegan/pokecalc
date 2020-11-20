@@ -10,7 +10,16 @@ const styles = StyleSheet.create({
     modalBox: {
         height: "75%",
         width: "50%",
-        backgroundColor: "black"
+        alignItems: "center",
+        justifyContent: "center"
+    },
+    coin: {
+        height: "100%",
+        width: "100%"
+    },
+    coinPressBox: {
+        height: "80%",
+        width: "80%"
     }
 });
 

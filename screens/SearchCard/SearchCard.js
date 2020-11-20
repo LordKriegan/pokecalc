@@ -10,7 +10,7 @@
  */
 
 import React, { useState } from 'react';
-import { View, TouchableOpacity, Text, ScrollView, TextInput } from 'react-native';
+import { View, ScrollView, TextInput } from 'react-native';
 import { ScreenBase, DoubleTap, MyBtn } from '../../components'; //shared comps
 import { SearchItem } from './components'; //local comps
 import axios from 'axios';

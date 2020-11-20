@@ -11,7 +11,7 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
-import { Main, SearchCard } from './screens';
+import { Main, SearchCard, AdScreen } from './screens';
 
 const Stack = createStackNavigator();
 
@@ -30,6 +30,10 @@ const App = () => {
         <Stack.Screen
           name="CardLookup"
           component={SearchCard}
+        />
+        <Stack.Screen
+          name="AdScreen"
+          component={AdScreen}
         />
       </Stack.Navigator>
     </NavigationContainer>
