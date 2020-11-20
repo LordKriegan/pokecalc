@@ -16,6 +16,8 @@ import { Main, SearchCard, AdScreen } from './screens';
 const Stack = createStackNavigator();
 
 const App = () => {
+
+  console.log("APP SCREEN", AdScreen)
   return (
     <NavigationContainer>
       <Stack.Navigator

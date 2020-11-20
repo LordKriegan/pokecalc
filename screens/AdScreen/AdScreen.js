@@ -3,9 +3,8 @@ import {SafeAreaView, View} from 'react-native';
 import {AdMobInterstitial} from 'react-native-admob';
 
 const AdScreen = () => {
-    const onFailToRecieveAd = (error) => console.log(error);
+    const onFailToRecieveAd = (error) => console.log("AdMob Error: \n===================================================",error, "\n=============================================");
     return (
-        <>
         <SafeAreaView>
           <AdMobInterstitial
             adSize="largeBanner"
@@ -13,7 +12,6 @@ const AdScreen = () => {
             didFailToReceiveAdWithError={onFailToRecieveAd}
           />
         </SafeAreaView>
-      </>
     )
 }
 
