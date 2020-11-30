@@ -23,8 +23,13 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         textAlign: "center"
     },
+    evolvesFromLabel: {
+        margin: 5,
+        color: "black",
+        backgroundColor: "rgba(220,220,220, 0.5)"
+    },
     nameInput: {
-        width: "60%",
+        flex: 1,
         margin: 5
     },
     hpInput: {
@@ -37,12 +42,11 @@ const styles = StyleSheet.create({
     cardList: {
         width: "100%",
     },
-    cardListItem: {
-        resizeMode: "stretch",
-        height: 250,
-        width: 150,
-        marginLeft: 5,
-        marginRight: 5
+    resultsMsgText: {
+        padding: 5,
+        borderRadius: 10,
+        backgroundColor: "rgba(220,220,220,0.5)",
+        textAlign: "center"
     }
 });
 

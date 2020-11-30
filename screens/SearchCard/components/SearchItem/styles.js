@@ -4,7 +4,7 @@ const styles = StyleSheet.create({
 
     cardListItem: {
         resizeMode: "stretch",
-        height: 250,
+        height: 200,
         width: 150,
         marginLeft: 5,
         marginRight: 5,

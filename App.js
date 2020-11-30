@@ -11,13 +11,12 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
-import { Main, SearchCard, AdScreen } from './screens';
+import { Main, SearchCard } from './screens';
 
 const Stack = createStackNavigator();
 
 const App = () => {
 
-  console.log("APP SCREEN", AdScreen)
   return (
     <NavigationContainer>
       <Stack.Navigator
@@ -32,10 +31,6 @@ const App = () => {
         <Stack.Screen
           name="CardLookup"
           component={SearchCard}
-        />
-        <Stack.Screen
-          name="AdScreen"
-          component={AdScreen}
         />
       </Stack.Navigator>
     </NavigationContainer>

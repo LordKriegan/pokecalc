@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { View } from 'react-native';
 import { ScreenBase } from '../../components'; //shared comps
 import { Active, Bench, MyModal, CoinModal } from './components'; //local comps
-import styles from './styles.js'
+import styles from './styles.js';
+import { AdMobInterstitial } from 'react-native-admob';
 
 const status = {
     paralyzed: false,
@@ -24,6 +25,7 @@ const Main = ({ route, navigation }) => {
             let { zone, index, newCard } = route.params.evolve;
             let newArr = [...(zone === "active") ? active : bench]
             newCard.dmg = newArr[index].dmg
+            setHistory([...history, `${newArr[index].name} evolved into ${newCard.name}`])
             newArr[index] = newCard;
             if (zone === "active") setActive(newArr);
             else setBench(newArr);
@@ -70,8 +72,11 @@ const Main = ({ route, navigation }) => {
         setBench([]);
         setHistory([]);
         setPrizeCount(6);
-        navigation.navigate("AdScreen");
-        //generate ad at some point
+
+        //generate ad
+        AdMobInterstitial.setAdUnitID('ca-app-pub-6198127817586825/8172324285');
+        
+        AdMobInterstitial.requestAd().then(() => AdMobInterstitial.showAd());
     }
 
     const setDmg = (dmg, zone, index) => {
@@ -175,7 +180,7 @@ const Main = ({ route, navigation }) => {
         setHistory([...history, `${active[index].name} is ${(newArr[index][status]) ? "now" : "no longer"} ${status}!`])
         setActive(newArr);
     }
-    
+
     return (
         <ScreenBase>
             <View style={styles.main}>

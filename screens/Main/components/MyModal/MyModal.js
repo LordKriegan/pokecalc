@@ -42,6 +42,7 @@ const MyModal = ({ modalVisible, setModalVisible, active, bench, modalContent, s
                             persistentScrollbar={true}>
                             <View style={styles.setHpBox}>
                                 <TextInput
+                                    disableFullscreenUI={true}
                                     value={hpInputText}
                                     onChangeText={text => validateInputs(text)}
                                     style={styles.setHpInput}
@@ -53,9 +54,19 @@ const MyModal = ({ modalVisible, setModalVisible, active, bench, modalContent, s
                                 (modalContent.zone === "active" && active[modalContent.index])
                                     ? <>
                                         <SwitchStatus
+                                            value={active[modalContent.index].asleep}
+                                            name="Asleep"
+                                            handler={() => setStatus(modalContent.index, "asleep")}
+                                        />
+                                        <SwitchStatus
                                             value={active[modalContent.index].paralyzed}
                                             name="Paralyzed"
                                             handler={() => setStatus(modalContent.index, "paralyzed")}
+                                        />
+                                        <SwitchStatus
+                                            value={active[modalContent.index].confused}
+                                            name="Confused"
+                                            handler={() => setStatus(modalContent.index, "confused")}
                                         />
                                         <SwitchStatus
                                             value={active[modalContent.index].burned}
@@ -63,19 +74,9 @@ const MyModal = ({ modalVisible, setModalVisible, active, bench, modalContent, s
                                             handler={() => setStatus(modalContent.index, "burned")}
                                         />
                                         <SwitchStatus
-                                            value={active[modalContent.index].asleep}
-                                            name="Asleep"
-                                            handler={() => setStatus(modalContent.index, "asleep")}
-                                        />
-                                        <SwitchStatus
                                             value={active[modalContent.index].poisoned}
                                             name="Poisoned"
                                             handler={() => setStatus(modalContent.index, "poisoned")}
-                                        />
-                                        <SwitchStatus
-                                            value={active[modalContent.index].confused}
-                                            name="Confused"
-                                            handler={() => setStatus(modalContent.index, "confused")}
                                         />
                                     </>
                                     : null

@@ -25,7 +25,7 @@ const CoinModal = ({ coinModalVisible, coinModal, history, setHistory }) => {
                 setCoin("tails");
                 setHistory([...history, "The coin landed on tails!"]);
             }
-        }, 3000)
+        }, 1000)
     }
     return (
         <Modal

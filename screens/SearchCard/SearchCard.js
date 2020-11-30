@@ -10,7 +10,7 @@
  */
 
 import React, { useState } from 'react';
-import { View, ScrollView, TextInput } from 'react-native';
+import { View, ScrollView, TextInput, Text } from 'react-native';
 import { ScreenBase, DoubleTap, MyBtn } from '../../components'; //shared comps
 import { SearchItem } from './components'; //local comps
 import axios from 'axios';
@@ -20,9 +20,12 @@ const SearchCard = ({ route, navigation }) => {
     const [cardList, setCardList] = useState([]);
     const [name, onChangeName] = useState('');
     const [hp, onChangeHP] = useState('');
+    const [showMsg, setShowMsg] = useState({ visible: false, msg: "" })
 
     const findCard = () => {
-        if (name === "") return
+        setShowMsg({ visible: false, msg: "" })
+        setCardList([])
+        if ((name === "" && !route.params?.evolve) || (route.params?.evolve && route.params?.evolve.name == "")) return
         let apiUrl = `https://api.pokemontcg.io/v1/cards?supertype=pokemon&name=${name}`;
         if (hp !== "") apiUrl += `&hp=${hp}`;
         console.log(route.params)
@@ -31,7 +34,8 @@ const SearchCard = ({ route, navigation }) => {
         axios
             .get(apiUrl)
             .then(({ data: { cards } }) => {
-                setCardList(cards.map(elem => parseCard(elem)));
+                if (cards.length) setCardList(cards.map(elem => parseCard(elem)));
+                else setShowMsg({ visible: true, msg: "No results found, try changing the search parameters!" })
             })
             .catch(error => {
                 console.log(error)
@@ -46,15 +50,15 @@ const SearchCard = ({ route, navigation }) => {
             dmg: 0
         }
         switch (card.subtype) {
+            case "TAG TEAM":
+            case "VMAX":
+                newCard.prize = 3
+                break;
             case "GX":
             case "EX":
             case "MEGA":
             case "V":
                 newCard.prize = 2
-                break;
-            case "TAG TEAM":
-            case "VMAX":
-                newCard.prize = 3
                 break;
             default:
                 newCard.prize = 1
@@ -93,23 +97,32 @@ const SearchCard = ({ route, navigation }) => {
         <ScreenBase>
             <View style={styles.container}>
                 <View style={styles.inputBox}>
-                    <TextInput style={{ ...styles.nameInput, ...styles.textInput }} onChangeText={text => onChangeName(text)} value={name} placeholder="Name" />
-                    <TextInput style={{ ...styles.hpInput, ...styles.textInput }} onChangeText={text => validateInputs(text)} value={hp} placeholder="HP" keyboardType="numeric" />
+                    <TextInput disableFullscreenUI={true} style={{ ...styles.nameInput, ...styles.textInput }} onChangeText={text => onChangeName(text)} value={name} placeholder="Name" />
+                    <TextInput disableFullscreenUI={true} style={{ ...styles.hpInput, ...styles.textInput }} onChangeText={text => validateInputs(text)} value={hp} placeholder="HP" keyboardType="numeric" />
                     <MyBtn style={styles.searchBtn} label="Search" handler={findCard} />
                 </View>
+                {
+                    (showMsg.visible) ?
+                        <Text style={styles.resultsMsgText}>{showMsg.msg}</Text> :
+                        null
+                }
                 <ScrollView style={styles.cardList} horizontal={true}>
                     <View style={{ flexDirection: "row", flexWrap: "wrap" }}>
                         {cardList.map((elem, i) => {
                             return (
 
                                 <DoubleTap key={elem.uri} handler={() => benchAndReturnToMain(elem)}>
-                                    <SearchItem card={elem} styleImg={styles.cardListItem} />
+                                    <SearchItem card={elem} />
                                 </DoubleTap>
                             )
                         })}
+
                     </View>
                 </ScrollView>
 
+                {(route.params?.evolve && route.params?.evolve.name !== "") ?
+                    <TextInput editable={false} style={{ ...styles.textInput, ...styles.evolvesFromLabel }} value={"Evolves from " + route.params.evolve.name} /> :
+                    null}
             </View>
         </ScreenBase>
     )
