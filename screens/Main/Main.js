@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View } from 'react-native';
-import { ScreenBase } from '../../components'; //shared comps
-import { Active, Bench, MyModal, CoinModal } from './components'; //local comps
+import { ScreenBase, MyBtn  } from '../../components'; //shared comps
+import { Active, Bench, MyModal, CoinModal} from './components'; //local comps
 import styles from './styles.js';
 import { AdMobInterstitial } from 'react-native-admob';
 
@@ -181,6 +181,10 @@ const Main = ({ route, navigation }) => {
         setActive(newArr);
     }
 
+    const goToAbout = () => {
+        navigation.navigate("About");
+    }
+
     return (
         <ScreenBase>
             <View style={styles.main}>
@@ -226,6 +230,7 @@ const Main = ({ route, navigation }) => {
                     openModal={openModal}
                     gotoCardLookup={gotoCardLookup}
                 />
+                <MyBtn textStyle={styles.aboutBtnTxt} style={styles.aboutBtn} label="?" handler={goToAbout} />
             </View>
         </ScreenBase>
     );
