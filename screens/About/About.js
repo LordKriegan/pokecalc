@@ -1,7 +1,7 @@
 import React from 'react';
 import { ScrollView, View, Text } from 'react-native';
 import { ScreenBase, MyBtn } from '../../components'; //shared comps
-import { AboutSection } from './components'; //shared comps
+import { AboutSection } from './components'; //local comps
 import styles from './styles.js';
 
 const Main = ({ route, navigation }) => {
@@ -20,17 +20,22 @@ const Main = ({ route, navigation }) => {
             img: require('../../resources/help_images/swipeLeftRight.png'),
             position: "right",
             header: "Swipes (Left/Right)",
-            body: "Need to quickly modify a Pokemon's HP? Swiping left or right will increment it's HP by 10."
+            body: "Need to quickly modify a Pokémon's HP? Swiping left or right will increment it's HP by 10."
         },
         {
             img: require('../../resources/help_images/swipeUpDown.png'),
             position: "left",
             header: "Swipes (Up/Down)",
-            body: "Swiping a Pokemon up while its on the bench will promote to the Active zone, while swiping a pokemon in the Active zone will demote it to the bench. Note that the Active zone does support 2 Pokemon at a time, so feel free to tag team!"
+            body: "Swiping a Pokémon up while its on the bench will promote to the Active zone, while swiping a Pokémon in the Active zone will demote it to the bench. Note that the Active zone does support 2 Pokemon at a time, so feel free to tag team!"
         },
         {
+            header: "Searching Cards",
+            body: "Add a card to the bench by tapping the plus button. Searching for cards requires at least a name, however, you can also narrow your results by providing the HP. When evolving, the previous stage will automatically be applied as a filter."
+        }
+        ,
+        {
             header: "Legal Mumbo Jumbo",
-            body: "Pokemon and all assosciated Intellectual Properties are copyrights of their respective owners."
+            body: "Pokémon and all assosciated Intellectual Properties are copyrights of their respective owners. \n Pokémon card data supplied by pokemontcg.io \n This app is not produced or endorsed by Nintendo or Pokémon Company"
         }
     ]
     return (
