@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View } from 'react-native';
 import { ScreenBase, MyBtn  } from '../../components'; //shared comps
 import { Active, Bench, MyModal, CoinModal} from './components'; //local comps
+
 import styles from './styles.js';
 import { AdMobInterstitial } from 'react-native-admob';
 
@@ -43,6 +44,7 @@ const Main = ({ route, navigation }) => {
     });
     const [history, setHistory] = useState([]);
     const [coinModal, setCoinModal] = useState(false);
+    
 
     const addCard = (card) => {
         if (active.length + bench.length >= 6) return
@@ -221,6 +223,7 @@ const Main = ({ route, navigation }) => {
                     resetGame={resetGame}
                     history={history}
                     setCoinModal={setCoinModal}
+                    
                 />
                 <Bench
                     active={active}
@@ -229,6 +232,7 @@ const Main = ({ route, navigation }) => {
                     promote={promote}
                     openModal={openModal}
                     gotoCardLookup={gotoCardLookup}
+                    
                 />
                 <MyBtn textStyle={styles.aboutBtnTxt} style={styles.aboutBtn} label="?" handler={goToAbout} />
             </View>

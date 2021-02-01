@@ -35,7 +35,7 @@ const Main = ({ route, navigation }) => {
         ,
         {
             header: "Legal Mumbo Jumbo",
-            body: "Pokémon and all assosciated Intellectual Properties are copyrights of their respective owners. \n Pokémon card data supplied by pokemontcg.io \n This app is not produced or endorsed by Nintendo or Pokémon Company"
+            body: "Pokémon and all assosciated Intellectual Properties are copyrights of their respective owners. \n Pokémon card data supplied by pokemontcg.io \n This app is not produced or endorsed by Nintendo or Pokémon Company."
         }
     ]
     return (

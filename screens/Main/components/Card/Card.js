@@ -1,11 +1,47 @@
-import React, { useState } from 'react';
-import { Image, Text, View } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { Image, Text, View, TouchableOpacity } from 'react-native';
 import { DoubleTap } from '../../../../components';
+import { Storage } from '../../../../lib';
 import GestureRecognizer, { swipeDirections } from 'react-native-swipe-gestures';
 import styles from './styles';
 
 const Card = (props) => {
     const [isError, setError] = useState(false);
+    const [isFav, setFav] = useState(false);
+    
+    useEffect(() => {
+        Storage.getItem("Favorites", props.card.uri).then((data) => {
+            if (data) {
+                setFav(true);
+            }
+        })
+    })
+
+    const handleFav = () => {
+        Storage.getItem("Favorites", props.card.uri).then( (data) => {
+            if (data) {
+                Storage.getAll("Favorites").then((data) => {
+                    delete data[props.card.uri]
+                    Storage.setItem("Favorites", data)
+                    setFav(false);
+                }) 
+            } else {
+                Storage.getAll("Favorites").then( (data) => {
+                    const card = JSON.parse(JSON.stringify(props.card));
+                    delete card.asleep;
+                    delete card.burned;
+                    delete card.confused;
+                    delete card.poisoned;
+                    delete card.paralyzed;
+                    card.dmg = 0;
+                    data[card.uri] = card;
+                    Storage.setItem("Favorites", data);
+                    setFav(true);
+                })
+            }
+            
+        })
+    }
     return (
 
         <GestureRecognizer
@@ -40,6 +76,10 @@ const Card = (props) => {
                     </View>
                     : null
             }
+            <TouchableOpacity style={(props.type === "active") ? styles.starIconActive : styles.starIconBench} onPress={handleFav} >
+                <Image style={styles.star} source={ (isFav) ? require('../../../../resources/Golden_star.png') : require('../../../../resources/blank_star.png')} />
+            </TouchableOpacity>
+            
         </GestureRecognizer>
 
     );

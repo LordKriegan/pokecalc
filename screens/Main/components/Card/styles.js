@@ -36,6 +36,25 @@ const styles = StyleSheet.create({
         height: 40,
         width: 40,
         resizeMode: "contain"
+    },
+    star: {
+        width: "100%",
+        height: "100%",
+        resizeMode: "contain",
+    },
+    starIconActive: {
+        width: "25%",
+        height: "25%",
+        position: "absolute",
+        bottom: "-5%",
+        right: 0
+    },
+    starIconBench: {
+        width: "15%",
+        height: "15%",
+        position: "absolute",
+        bottom: 0,
+        right: "15%"
     }
 });
 

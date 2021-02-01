@@ -13,6 +13,7 @@ import React, { useState } from 'react';
 import { View, ScrollView, TextInput, Text } from 'react-native';
 import { ScreenBase, DoubleTap, MyBtn } from '../../components'; //shared comps
 import { SearchItem } from './components'; //local comps
+import { Storage } from '../../lib';
 import axios from 'axios';
 import styles from './styles';
 
@@ -40,6 +41,23 @@ const SearchCard = ({ route, navigation }) => {
             .catch(error => {
                 console.log(error)
             });
+    }
+
+    const loadFavorites = () => {
+        Storage.getAll("Favorites").then((data) => {
+            
+            if (data) {
+                let arr = [];
+                for (const key in data) {
+                    
+                    if (data[key]?.uri) {
+                        arr.push(data[key]);
+                    }
+                }
+                console.log("setting arr", arr)
+                setCardList(arr);
+            }
+        })
     }
 
     const parseCard = (card) => {
@@ -100,6 +118,7 @@ const SearchCard = ({ route, navigation }) => {
                     <TextInput disableFullscreenUI={true} style={{ ...styles.nameInput, ...styles.textInput }} onChangeText={text => onChangeName(text)} value={name} placeholder="Name" />
                     <TextInput disableFullscreenUI={true} style={{ ...styles.hpInput, ...styles.textInput }} onChangeText={text => validateInputs(text)} value={hp} placeholder="HP" keyboardType="numeric" />
                     <MyBtn style={styles.searchBtn} label="Search" handler={findCard} />
+                    <MyBtn style={styles.searchBtn} label="Favorites" handler={loadFavorites} />
                 </View>
                 {
                     (showMsg.visible) ?
